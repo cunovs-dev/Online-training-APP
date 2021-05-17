@@ -53,7 +53,8 @@ class Application extends React.Component {
       </div>
     );
   }
-};
+}
+
 export default connect(({ loading, application }) => ({
   loading,
   application,

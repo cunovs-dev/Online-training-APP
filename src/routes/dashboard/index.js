@@ -11,6 +11,7 @@ import { Layout, WhiteSpace, Icon, Tabs, List } from 'components';
 import styles from './index.less';
 import { getLocalIcon } from 'utils';
 import { handleGoto, handleBuildingClick } from 'utils/commonevents';
+import { defaultBusiness } from 'utils/defaults';
 import Banner from 'components/banner/index';
 import HotCourse from 'components/hotCourse/index';
 import CarouselGrid from 'components/carouselgrid';
@@ -21,15 +22,9 @@ import VideoListView from 'components/videoListView';
 import SearchHeader from 'components/searchheader';
 
 const PrefixCls = 'dashboard';
-const tabs = [
-  { title: '首页' },
-  { title: '移动' },
-  { title: '家庭' },
-  { title: '新兴' },
-  { title: '政企' },
-  { title: '团队管理' },
-  { title: '客情维系' },
-];
+
+const tabs =defaultBusiness;
+
 const Dashboard = ({ dashboard, loading, dispatch }) => {
   const { BaseLine } = Layout,
     { bannerDatas, listData, hasMore, scrollerTop, selectKey, hotBannerDatas, infoDatas, carouseDatas } = dashboard,
@@ -74,7 +69,7 @@ const Dashboard = ({ dashboard, loading, dispatch }) => {
     arr && arr.map((data, i) => <InfoBox key={i} {...data} handleClick={handleBuildingClick.bind(null, dispatch)} />)
   );
   const onChange = (tab, key) => {
-    console.log(key)
+    console.log(key);
     dispatch({
       type: 'dashboard/updateState',
       payload: {
@@ -84,10 +79,10 @@ const Dashboard = ({ dashboard, loading, dispatch }) => {
 
   };
   const getContent = (selectKey) => {
-    if (selectKey===0) {
+    if (selectKey === 0) {
       return (
         <Refresh>
-          <div className={styles.children} >
+          <div className={styles.children}>
             <div>
               {bannerDatas.length > 0 &&
               <Banner bannerDatas={bannerDatas} handleClick={() => handleGoto(dispatch, 'lessondetails')} />}
@@ -95,9 +90,13 @@ const Dashboard = ({ dashboard, loading, dispatch }) => {
             <WhiteSpace size="md" />
             <CarouselGrid datas={carouseDatas} />
             <WhiteSpace size="md" />
-            <HotCourse bannerDatas={hotBannerDatas} handleClick={handleBuildingClick.bind(null, dispatch)}
-                       moreClick={() => handleGoto(dispatch, 'videoList', { name: '猜你喜欢' })} />
-            <WhiteSpace size="md" />
+            <HotCourse
+              bannerDatas={hotBannerDatas}
+              handleClick={handleBuildingClick.bind(null, dispatch)}
+              moreClick={() => handleGoto(dispatch, 'videoList', { name: '猜你喜欢' })}
+            />
+            <WhiteSpace size="md"
+            />
             <Container
               title="必修课程"
               children={getChildren(infoDatas)}
@@ -105,9 +104,10 @@ const Dashboard = ({ dashboard, loading, dispatch }) => {
             />
             <WhiteSpace size="md" />
             <BaseLine />
-          </div>;
+          </div>
+          ;
         </Refresh>
-      )
+      );
     }
     return <VideoListView {...listProps} />;
   };

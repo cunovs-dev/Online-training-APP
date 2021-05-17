@@ -168,6 +168,15 @@ const Routers = function ({ history, app }) {
           },
         },
         {
+          path: 'perfectInformation',
+          getComponent (nextState, cb) {
+            require.ensure([], (require) => {
+              registerModel(app, require('models/perfectInformation'));
+              cb(null, require('routes/perfectInformation/'));
+            }, 'perfectInformation');
+          },
+        },
+        {
           path: 'building',
           getComponent (nextState, cb) {
             require.ensure([], (require) => {

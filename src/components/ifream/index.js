@@ -35,7 +35,7 @@ class Iframes extends React.Component {
         isLoading: false,
       });
     };
-  }q
+  }
 
   render () {
     return (
