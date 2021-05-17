@@ -1,0 +1,32 @@
+@PrefixCls: lessondetails;
+.@{PrefixCls}-outer {
+  min-height: 100vh;
+}
+
+.@{PrefixCls}-list {
+  :global {
+    .am-list-body {
+      border: 0 none;
+    }
+    .am-list-item:not(:last-child) .am-list-line {
+      border: 0 none;
+    }
+  }
+}
+
+.baseInfo {
+  padding: 20px;
+  background-color: #fff;
+  .title {
+    font-size: @titleFontSize;
+    margin: 20px 0;
+  }
+  .question {
+    font-size: @commonFonetSize;
+    color: @infoColor;
+  }
+}
+
+.extra{
+  display: flex;
+}

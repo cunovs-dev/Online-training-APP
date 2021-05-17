@@ -1,0 +1,26 @@
+@import "../../themes/default";
+
+@PrefixCls: introduction;
+
+.@{PrefixCls}-outer {
+  padding: 20px;
+  font-size: 30px;
+  text-indent: 2em;
+  line-height: 1.5em;
+  background: #fff;
+  &-content {
+    font-size: @commonFonetSize;
+    color: @infoColor;
+    height: 4.5em;
+    overflow: hidden;
+  }
+  &-button {
+    color: @primary-color;
+    text-align: right;
+
+  }
+}
+
+.open {
+  height: 100%;
+}

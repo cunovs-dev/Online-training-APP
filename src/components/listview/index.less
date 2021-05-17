@@ -1,0 +1,22 @@
+@import '../../themes/default.less';
+
+@PrefixCls: cn-listview;
+@first-color: #656577;
+@second-color: #635f5f;
+@line-color: #c7c7cc;
+@font-size: 26px;
+
+
+.@{PrefixCls}-outer {
+  :global {
+    .am-list-header {
+      padding: 0;
+    }
+    .am-list-body{
+      border-bottom: 0;
+    }
+    .am-list-body div:not(:last-child) .am-list-line {
+      border-bottom: 0 !important;
+    }
+  }
+}

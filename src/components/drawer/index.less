@@ -1,0 +1,24 @@
+@import '../../themes/default.less';
+
+@PrefixCls: drawer;
+
+.@{PrefixCls}-classify {
+  background: #fff;
+  display: flex;
+  align-items: center;
+  & span {
+    margin-right: 20px;
+  }
+}
+
+.@{PrefixCls}-outer {
+  position: relative;
+  height:100vh;
+  :global {
+    .am-drawer-open.am-drawer.am-drawer-left .am-drawer-sidebar {
+      width: 75%;
+      padding: 20px;
+      background: #fff !important;
+    }
+  }
+}

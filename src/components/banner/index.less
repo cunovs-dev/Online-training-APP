@@ -1,0 +1,38 @@
+@PrefixCls: banner;
+.space-carousel {
+  border-radius: 30px;
+}
+
+.@{PrefixCls}-outer {
+  border-radius: @radius  ;
+  :global {
+    .am-carousel-wrap {
+      padding-right: 10px;
+      padding-bottom: 6px;
+      text-align: right;
+    }
+  }
+}
+
+.@{PrefixCls}-image {
+  position: relative;
+  height: 22vh;
+  & img {
+    border-radius:@radius;
+    height: 22vh;
+  }
+  & div {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    bottom: 0;
+    box-sizing: border-box;
+    color: #fff;
+    padding: 10px 20px;
+    background: rgba(0, 0, 0, .6);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    border-radius: 0 0 30px 30px;
+  }
+}

@@ -1,0 +1,135 @@
+
+.loaderContainer {
+  position: relative;
+  height: 20px;
+  margin-left: 40px;
+}
+
+.loaderContainer {
+  > div {
+    position: relative;
+    display: inline-block;
+    background: @primary-color;
+    height: 100%;
+    width: 8px;
+    margin: 0;
+    -webkit-animation: load 3s ease-in-out infinite;
+    animation: load 3s ease-in-out infinite;
+  }
+}
+
+.loaderContainer {
+  .rectangle2 {
+    -webkit-animation-delay: 0.1s;
+    animation-delay: 0.1s;
+  }
+}
+
+.loaderContainer {
+  .rectangle3 {
+    -webkit-animation-delay: 0.2s;
+    animation-delay: 0.2s;
+  }
+}
+
+.loaderContainer {
+  .rectangle4 {
+    -webkit-animation-delay: 0.3s;
+    animation-delay: 0.3s;
+  }
+}
+
+.loaderContainer {
+  .rectangle5 {
+    -webkit-animation-delay: 0.4s;
+    animation-delay: 0.4s;
+  }
+}
+
+.loaderContainer {
+  .rectangle6 {
+    -webkit-animation-delay: 0.5s;
+    animation-delay: 0.5s;
+  }
+}
+
+@-moz-keyframes load {
+  0%, 100% {
+    -moz-transform: scaleY(1);
+    background: #03A9F4;
+  }
+  16.67% {
+    -moz-transform: scaleY(3);
+    background: #FF5722;
+  }
+  33.33% {
+    -moz-transform: scaleY(1);
+    background: #FF5252;
+  }
+  50% {
+    -moz-transform: scaleY(3);
+    background: #E91E63;
+  }
+  66.67% {
+    -moz-transform: scaleY(1);
+    background: #9C27B0;
+  }
+  83.34% {
+    -moz-transform: scaleY(3);
+    background: #673AB7;
+  }
+}
+
+@-webkit-keyframes load {
+  0%, 100% {
+    -webkit-transform: scaleY(1);
+    background: #03A9F4;
+  }
+  16.67% {
+    -webkit-transform: scaleY(3);
+    background: #FF5722;
+  }
+  33.33% {
+    -webkit-transform: scaleY(1);
+    background: #FF5252;
+  }
+  50% {
+    -webkit-transform: scaleY(3);
+    background: #E91E63;
+  }
+  66.67% {
+    -webkit-transform: scaleY(1);
+    background: #9C27B0;
+  }
+  83.34% {
+    -webkit-transform: scaleY(3);
+    background: #673AB7;
+  }
+}
+
+@keyframes load {
+  0%, 100% {
+    transform: scaleY(1);
+    background: #03A9F4;
+  }
+  16.67% {
+    transform: scaleY(3);
+    background: #FF5722;
+  }
+  33.33% {
+    transform: scaleY(1);
+    background: #FF5252;
+  }
+  50% {
+    transform: scaleY(3);
+    background: #E91E63;
+  }
+  66.67% {
+    transform: scaleY(1);
+    background: #9C27B0;
+  }
+  83.34% {
+    transform: scaleY(3);
+    background: #673AB7;
+  }
+}
