@@ -68,6 +68,19 @@ const defaultScene = [
   { title: '新兴' },
 ];
 
+const defaultSceneIcon = {
+    7: require('../themes/images/grid/01.png'),
+    8: require('../themes/images/grid/02.png'),
+    9: require('../themes/images/grid/03.png'),
+    10: require('../themes/images/grid/04.png'),
+    11: require('../themes/images/grid/05.png'),
+    2: require('../themes/images/grid/06.png'),
+    1: require('../themes/images/grid/07.png'),
+    4: require('../themes/images/grid/08.png'),
+    3: require('../themes/images/grid/09.png'),
+  }
+
+
 const defaultShortBoard = [
   { title: '督导激发力' },
   { title: '维系协调力' },
@@ -98,4 +111,4 @@ const mineGrid = [
 ];
 
 
-export default { defaultTabBars, defaultBusiness, defaultScene, defaultShortBoard, mineGrid };
+export default { defaultTabBars, defaultBusiness, defaultSceneIcon,defaultScene, defaultShortBoard, mineGrid };

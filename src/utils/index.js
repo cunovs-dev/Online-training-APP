@@ -7,8 +7,8 @@ import defaultUserIcon from 'themes/images/default/userIcon.jpg';
 import formsubmit from './formsubmit';
 
 
-const { userTag: { username, usertoken, userpower, userid, useravatar, usertype } } = config,
-  { _cs, _cr, _cg } = cookie;
+const { userTag: { username, usertoken, userid, useravatar, usertype } } = config,
+  { _cs, _cr} = cookie;
 // 连字符转驼峰
 String.prototype.hyphenToHump = function () {
   return this.replace(/-(\w)/g, (...args) => {
@@ -65,7 +65,6 @@ const getErrorImg = (el) => {
 
 const setLoginIn = ({ user_token, user_name, user_power, user_id, user_avatar, user_type }) => {
   _cs(username, user_name);
-  _cs(userpower, user_power);
   _cs(usertoken, user_token);
   _cs(userid, user_id);
   _cs(useravatar, user_avatar);
@@ -73,12 +72,21 @@ const setLoginIn = ({ user_token, user_name, user_power, user_id, user_avatar, u
 };
 const setLoginOut = () => {
   _cr(username);
-  _cr(userpower);
   _cr(usertoken);
   _cr(userid);
   _cr(useravatar);
   _cr(usertype);
 };
+
+const setSession = (obj) => {
+  Object.keys(obj)
+    .map(keys => {
+      if (obj[keys]) {
+        _cs(keys, obj[keys]);
+      }
+    });
+};
+
 const getLocalIcon = (icon) => {
   const regex = /\/([^\/]+?)\./g;
   let addIconName = [];
@@ -113,26 +121,6 @@ const getOffsetTopByBody = (el) => {
   return offsetTop;
 };
 
-function getWebSocketUrl () {
-  return new Promise((resolve, reject) => {
-    // 请求地址根据语种不同变化
-    var url = 'wss://iat-api.xfyun.cn/v2/iat';
-    var host = 'iat-api.xfyun.cn';
-    var apiKey = API_KEY;
-    var apiSecret = API_SECRET;
-    var date = new Date().toGMTString();
-    var algorithm = 'hmac-sha256';
-    var headers = 'host date request-line';
-    var signatureOrigin = `host: ${host}\ndate: ${date}\nGET /v2/iat HTTP/1.1`;
-    var signatureSha = CryptoJS.HmacSHA256(signatureOrigin, apiSecret);
-    var signature = CryptoJS.enc.Base64.stringify(signatureSha);
-    var authorizationOrigin = `api_key="${apiKey}", algorithm="${algorithm}", headers="${headers}", signature="${signature}"`;
-    var authorization = btoa(authorizationOrigin);
-    url = `${url}?authorization=${authorization}&date=${date}&host=${host}`;
-    resolve(url);
-  });
-}
-
 const renderSize = (fileSize) => {
   if (fileSize < 1024) {
     return `${fileSize}B`;
@@ -165,6 +153,10 @@ const getCommonDate = (date, details = true, showWeek = true) => {
     return `${year}年${preDate.getMonth() + 1}月${preDate.getDate()}日`;
   }
 };
+const getVideoTips = (arr = [], id) => {
+  return arr.find(item => item.id === id).title || '';
+};
+
 
 module.exports = {
   config,
@@ -177,8 +169,9 @@ module.exports = {
   getLocalIcon,
   formsubmit,
   setLoginOut,
-  getWebSocketUrl,
   pattern,
+  getVideoTips,
   renderSize,
   getCommonDate,
+  setSession,
 };

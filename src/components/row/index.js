@@ -14,7 +14,7 @@ const PrefixCls = 'row',
   Brief = Item.Brief;
 
 module.exports = {
-  commonRow: ({ previewImage, videoName, praise = 0, people }, onClick) => { //公共视频列表
+  commonRow: ({ previewImage, videoName, praise = 0, yewu, people }, onClick) => { //公共视频列表
     return (
       <div className={styles[`${PrefixCls}-common`]}>
         <Item
@@ -25,7 +25,7 @@ module.exports = {
         >
           <span className={styles[`${PrefixCls}-common-title`]}> {videoName}</span>
           <div>
-            <Tag size="xs" text="移动" color="cyan" />
+            <Tag size="xs" text={yewu} color="cyan" />
           </div>
           <div className={styles[`${PrefixCls}-common-info`]}>
             <div className={styles[`${PrefixCls}-common-info-box`]}>
@@ -45,7 +45,7 @@ module.exports = {
     return (
       <div className={styles.consumption}>
         <Item multipleLine extra={<span className={styles.num}>{`-${integral}`}</span>}>
-          {title} <Brief>{getCommonDate(date,false)}</Brief>
+          {title} <Brief>{getCommonDate(date, false)}</Brief>
         </Item>
       </div>
     );

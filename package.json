@@ -16,7 +16,6 @@
     "jsonp": "^0.2.1",
     "less-vars-to-js": "^1.1.2",
     "lodash": "^4.17.4",
-    "md5": "^2.2.1",
     "nprogress": "^0.2.0",
     "path-to-regexp": "^1.7.0",
     "prop-types": "^15.5.10",

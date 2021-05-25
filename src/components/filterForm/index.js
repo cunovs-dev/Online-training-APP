@@ -5,7 +5,7 @@
  */
 import React from 'react';
 import { defaultBusiness, defaultScene, defaultShortBoard } from 'utils/defaults';
-import { Loader, Tag, Button } from 'components';
+import { Loader, Tag, Button, Toast } from 'components';
 import styles from './index.less';
 
 class FilterForm extends React.Component {
@@ -14,7 +14,8 @@ class FilterForm extends React.Component {
 
     this.state = {
       height: document.documentElement.clientHeight - 45,
-      isLoading: false,
+      yw: [],
+      cj: [],
     };
   }
 
@@ -26,23 +27,58 @@ class FilterForm extends React.Component {
 
   }
 
+  onVocationalChange = (select, { id }, type) => {
+    if (select) {
+      this.setState({
+        [type]: [...this.state[type], id],
+      });
+    } else {
+      Array.prototype.remove = function (val) {
+        const index = this.indexOf(val);
+        if (index > -1) {
+          console.log(this);
+          this.splice(index, 1);
+        }
+      };
+      this.state[type].remove(id);
+      this.setState({
+        [type]: this.state[type],
+      });
+    }
+  };
+
+  onSubmit = () => {
+    const { yw, cj } = this.state;
+    if (yw.length > 0 && cj.length > 0) {
+      const data = {
+        cj: cj.join(','),
+        yw: yw.join(','),
+      };
+      this.props.onOk(data);
+    } else {
+      Toast.fail('请选择感兴趣的业务和场景');
+    }
+  };
+
   render () {
-    const { perfect = false } = this.props;
+    const { perfect = false, sceneList, vocationalList } = this.props;
     return (
       <div className={styles.outer}>
         <div>
           <div className={styles.title}>业务</div>
-          {defaultBusiness.map(item => <Tag className={styles.tag}>{item.title}</Tag>)}
+          {vocationalList.map(item => <Tag key={item.id} className={styles.tag}
+                                           onChange={(select) => this.onVocationalChange(select, item, 'yw')}>{item.title}</Tag>)}
         </div>
         <div>
           <div className={styles.title}>场景</div>
-          {defaultScene.map(item => <Tag className={styles.tag}>{item.title}</Tag>)}
+          {sceneList.map(item => <Tag key={item.id} className={styles.tag}
+                                      onChange={(select) => this.onVocationalChange(select, item, 'cj')}>{item.title}</Tag>)}
         </div>
         {
           perfect ?
             <div>
               <div className={styles.title}>能力测评</div>
-              <Button type="primary">开始测评</Button>
+              <Button type="primary" onClick={this.onSubmit}>开始测评</Button>
             </div>
             :
             <div>

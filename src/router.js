@@ -125,14 +125,6 @@ const Routers = function ({ history, app }) {
           },
         },
         {
-          path: 'homeworkdetails',
-          getComponent (nextState, cb) {
-            require.ensure([], (require) => {
-              cb(null, require('routes/homeworkdetails/'));
-            }, 'homeworkdetails');
-          },
-        },
-        {
           path: 'iframe',
           getComponent (nextState, cb) {
             require.ensure([], (require) => {

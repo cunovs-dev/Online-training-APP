@@ -1,4 +1,3 @@
-
 import { hashHistory } from 'react-router';
 import axios from 'axios';
 import qs from 'qs';
@@ -6,12 +5,13 @@ import lodash from 'lodash';
 import pathToRegexp from 'path-to-regexp';
 import { Toast } from 'antd-mobile';
 import { _cg } from './cookie';
-
 import { baseURL, userTag } from './config';
 
+const token = _cg('userPwd')?_cg('userPwd').split(',') :'cnv-token,token'.split(',');
+
 axios.defaults.baseURL = baseURL;
+axios.defaults.headers.common[`${token[0]}`] = `${token[1]}`;
 axios.defaults.withCredentials = true;
-const { usertoken } = userTag;
 
 const doDecode = (json) => {
   return eval(`(${json})`);
@@ -23,17 +23,10 @@ const fetch = (options) => {
     fetchType,
     url,
   } = options;
-  
-  const appendParams = {
-    /*    header: {
-          'Access-Control-Allow-Origin': '*',
-          'x-requested-with': 'XMLHttpRequest'
-        } */
-  };
-  // appendParams[usertoken] = _cg(usertoken)
-  
-  const cloneData = lodash.cloneDeep({ ...data, ...appendParams });
-  
+
+
+  const cloneData = lodash.cloneDeep({ ...data });
+
   try {
     let domin = '';
     if (url.match(/[a-zA-z]+:\/\/[^/]*/)) {
@@ -51,20 +44,18 @@ const fetch = (options) => {
   } catch (e) {
     Toast.offline(e.message);
   }
-  
+
   switch (method.toLowerCase()) {
     case 'get':
-      return axios.get(url, {
-        params: cloneData,
-      });
+      return axios.get(url, { params: cloneData });
     case 'delete':
       return axios.delete(url, {
         data: cloneData,
       });
     case 'post':
-      return axios.post(url, qs.stringify(cloneData, {
-        indices: false,
-      }));
+      return axios.post(
+        url,
+        qs.stringify(cloneData, { indices: false }));
     case 'put':
       return axios.put(url, cloneData);
     case 'patch':

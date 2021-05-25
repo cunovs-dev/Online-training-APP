@@ -1,23 +1,7 @@
 import { request, config } from 'utils';
 
 const { api } = config;
-const { GetVocationalApi, RetrievalApi, SearchCourseApi, GetRecommendApi, GetRequiredCoursesApi, GetPosterApi, GetSceneApi } = api;
-
-export async function queryVocational (payload) {
-  return request({
-    url: GetVocationalApi,
-    method: 'get',
-    data: payload,
-  });
-}
-
-export async function queryScene (payload) {
-  return request({
-    url: GetSceneApi,
-    method: 'get',
-    data: payload,
-  });
-}
+const { RetrievalApi, SearchCourseApi, GetRecommendApi, GetRequiredCoursesApi, GetPosterApi } = api;
 
 
 export async function queryPoster (payload) {

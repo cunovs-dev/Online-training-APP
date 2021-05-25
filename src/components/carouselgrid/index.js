@@ -3,26 +3,35 @@ import styles from './index.less';
 
 const PrefixCls = 'carouselgrid';
 const CarouselGrid = (props) => {
+  console.log(props.data)
   return (
     <div className={styles[`${PrefixCls}`]}>
       <Grid
         itemStyle={{
           color: '#ddd',
         }}
-        data={props.datas}
+        data={props.data}
         columnNum={4}
         dots={false}
         hasLine={false}
         isCarousel
         carouselMaxRow={1}
-        onClick={_el => console.log(_el)}
+        onClick={
+          (data) => {
+            const params = {
+              fetchType:props.data,
+              ...data,
+            };
+            props.handlerClick(params,props.dispatch);
+          }
+        }
       />
     </div>
   );
 };
 
 CarouselGrid.defaultProps = {
-  datas: [],
+  data: [],
+  handlerClick: null,
 };
-CarouselGrid.propTypes = {};
 export default CarouselGrid;

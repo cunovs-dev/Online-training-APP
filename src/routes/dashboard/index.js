@@ -10,7 +10,7 @@ import { connect } from 'dva';
 import { Layout, WhiteSpace, Icon, Tabs, List } from 'components';
 import styles from './index.less';
 import { getLocalIcon } from 'utils';
-import { handleGoto, handleBuildingClick } from 'utils/commonevents';
+import { handleGoto, handleBuildingClick, handleGridClick } from 'utils/commonevents';
 import { defaultBusiness } from 'utils/defaults';
 import Banner from 'components/banner/index';
 import HotCourse from 'components/hotCourse/index';
@@ -23,11 +23,10 @@ import SearchHeader from 'components/searchheader';
 
 const PrefixCls = 'dashboard';
 
-const tabs = defaultBusiness;
-
-const Dashboard = ({ dashboard, loading, dispatch }) => {
+const Dashboard = ({ dashboard, app, loading, dispatch }) => {
   const { BaseLine } = Layout,
-    { posterData, listData, hasMore, scrollerTop, selectKey, recommendData, requiredData, sceneList, vocationalList } = dashboard,
+    { posterData, listData, hasMore, scrollerTop, selectKey, recommendData, requiredData } = dashboard,
+    { sceneList, vocationalList } = app,
     onRefresh = (callback) => {
       dispatch({
         type: `${PrefixCls}/queryList`,
@@ -55,7 +54,6 @@ const Dashboard = ({ dashboard, loading, dispatch }) => {
         });
       }
     };
-
   const listProps = {
     onRefresh,
     onScrollerTop,
@@ -74,6 +72,7 @@ const Dashboard = ({ dashboard, loading, dispatch }) => {
       type: 'dashboard/queryList',
       payload: {
         id: key,
+        type: 'yw',
       },
     });
     dispatch({
@@ -90,10 +89,10 @@ const Dashboard = ({ dashboard, loading, dispatch }) => {
           <div className={styles.children}>
             <div>
               {posterData.length > 0 &&
-              <Banner bannerDatas={posterData} handleClick={() => handleGoto(dispatch, 'lessondetails')} />}
+              <Banner hasTitle bannerDatas={posterData} />}
             </div>
             <WhiteSpace size="md" />
-            <CarouselGrid datas={sceneList} />
+            <CarouselGrid data={sceneList} dispatch={dispatch} handlerClick={handleGridClick} />
             <WhiteSpace size="md" />
             <HotCourse
               bannerDatas={recommendData}
@@ -144,4 +143,4 @@ Dashboard.propTypes = {
   loading: PropTypes.object,
 };
 
-export default connect(({ dashboard, loading }) => ({ dashboard, loading }))(Dashboard);
+export default connect(({ dashboard, app, loading }) => ({ dashboard, app, loading }))(Dashboard);

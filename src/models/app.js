@@ -1,4 +1,3 @@
-
 import { routerRedux } from 'dva/router';
 import { parse } from 'qs';
 import { config, cookie, setLoginOut } from 'utils';
@@ -6,7 +5,7 @@ import { defaultTabBarIcon, defaultTabBars } from 'utils/defaults';
 
 
 const { userTag: { username, usertoken, userid, useravatar, usertype } } = config,
-  { _cs, _cr, _cg } = cookie,
+  { _cg } = cookie,
   getInfoUser = () => {
     const result = {};
     result[username] = _cg(username);
@@ -33,7 +32,8 @@ const { userTag: { username, usertoken, userid, useravatar, usertype } } = confi
 export default {
   namespace: 'app',
   state: {
-    spinning: false,
+    vocationalList: [],
+    sceneList: [],
     isLogin: getUserLoginStatus(),
     users: getInfoUser(),
     tabBars: [],
@@ -52,7 +52,7 @@ export default {
           ...others,
         },
       });
-      history.listen(({ pathname, query, action }) => {
+      history.listen(({ pathname }) => {
         if (pathname === '/') {
           dispatch({
             type: 'updateUsers',
@@ -64,7 +64,6 @@ export default {
   effects: {
     * query ({ payload }, { call, put, select }) {
       let tabBars = defaultTabBars;
-
       tabBars = tabBars.map((bar, i) => appendIcon(bar, i));
       yield put({
         type: 'updateState',
@@ -73,7 +72,7 @@ export default {
         },
       });
     },
-    * logout ({}, { call, put, select }) {
+    * logout ({}, { call, put }) {
       const data = yield call(logout);
       if (data) {
         setLoginOut();
@@ -111,7 +110,5 @@ export default {
         isLogin,
       };
     },
-
-  }
-  ,
+  },
 };

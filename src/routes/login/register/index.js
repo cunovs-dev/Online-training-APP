@@ -60,24 +60,43 @@ class register extends React.Component {
     }, 1000);
   };
 
+  onValidateCodeClick = () => {
+    this.props.form.validateFields(['phone'], {
+      force: true,
+
+    }, (error) => {
+      if (!error) {
+        this.setState({
+          isCodeSending: true,
+          isDisabled: true,
+        })
+        this.startCountDown()
+        this.props.dispatch({
+          type: 'login/sendLoginCode',
+          payload: {
+            ...this.props.form.getFieldsValue(),
+          },
+        })
+      } else {
+        Toast.fail('请输入正确的手机号', 3)
+      }
+    })
+  }
+
   onSubmit = () => {
     this.props.form.validateFields({
       force: true,
     }, (error) => {
       if (!error) {
-        const { usrMail, usrPwd } = this.props.form.getFieldsValue();
-        if (usrMail === 'admin' && usrPwd === 'aaa') {
           this.props.dispatch({
             type: 'login/login',
             payload: {
               ...this.props.form.getFieldsValue(),
             },
           });
-        } else {
-          Toast.fail('The password or username is incorrect', 2);
-        }
+
       } else {
-        Toast.fail('input error', 3);
+        Toast.fail('输入有误', 3);
       }
     });
   };
@@ -86,7 +105,6 @@ class register extends React.Component {
     const { form: { getFieldProps, getFieldError }, login: { buttonState }, location: { query } } = this.props,
       { type = 'register' } = query,
       userKey = 'phone',
-      powerKey = 'usrPwd',
       codeKey = 'code';
     return (
       <div>
@@ -97,7 +115,6 @@ class register extends React.Component {
           <form>
             <WingBlank size="md">
               <InputItem placeholder="手机号"
-                         name="phoneNum"
                          {...getFieldProps(userKey, {
                            rules: [
                              { required: true, message: '请输入手机号码' },
@@ -117,29 +134,6 @@ class register extends React.Component {
               </InputItem>
             </WingBlank>
             <WhiteSpace />
-            <WingBlank size="md">
-              <InputItem
-                type="password"
-                placeholder={this.placeholder}
-                {...getFieldProps(powerKey, {
-                  rules: [
-                    { required: true, message: '密码必修输入' },
-                    { pattern: pattern('password'), message: '6-12位且包含数字、字母、特殊字符（~!@#$%^&*等）' },
-                  ],
-                })}
-                clear
-                error={!!getFieldError(powerKey)}
-                onErrorClick={() => {
-                  Toast.fail(getFieldError(powerKey));
-                }}
-              >
-                <div className={styles.icon} style={{
-                  backgroundImage: `url(${pwd})`,
-                }}
-                />
-              </InputItem>
-              <WhiteSpace />
-            </WingBlank>
             <WingBlank size="md">
               <div className={styles.codeBox}>
                 <InputItem
@@ -162,7 +156,7 @@ class register extends React.Component {
                   inline
                   size="small"
                   className={styles.codeBtn}
-                  onClick={this.startCountDown}
+                  onClick={this.onValidateCodeClick}
                   disabled={this.state.isDisabled}
                 >
                   {

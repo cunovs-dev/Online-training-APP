@@ -4,16 +4,11 @@
  * @Description:
  */
 import { routerRedux } from 'dva/router';
-import { login, SendValidateCode } from 'services/login';
+import { login, sendLoginCode } from 'services/login';
 import { Toast } from 'antd-mobile';
 import modelExtend from 'dva-model-extend';
 import { pageModel } from './common';
-import { setLoginIn } from 'utils';
-
-const MD5 = require('md5'),
-  encrypt = (word) => {
-    return MD5(word, 'hex');
-  };
+import { setSession } from 'utils';
 
 export default modelExtend(pageModel, {
   namespace: 'login',
@@ -36,22 +31,32 @@ export default modelExtend(pageModel, {
           buttonState: false,
         },
       });
-      const { from = '/', ...params } = payload,
-        { usrPwd = '' } = params;
-      // const data = yield call(login, Object.assign({}, params, { usrPwd: encrypt(usrPwd) }), true);
-      yield put(routerRedux.push({
-        pathname: '/',
-      }));
-      yield put({
-        type: 'updateState',
-        payload: {
-          buttonState: true,
-        },
-      });
+      const { phone, code = '' } = payload;
+      const { data, success, msg } = yield call(login, { username: phone, code }, true);
+      const { userPwd, userId, userRealName, photoPath } = data;
+      if (success) {
+        yield setSession({
+          userPwd,
+          userId,
+          userRealName,
+          photoPath,
+        });
+        yield put(routerRedux.push({
+          pathname: '/',
+        }));
+      } else {
+        yield put({
+          type: 'updateState',
+          payload: {
+            buttonState: true,
+          },
+        });
+        Toast.fail(msg);
+      }
     },
-    * SendValidateCode ({ payload }, { call, put }) {
-      const { phoneNum } = payload;
-      const data = yield call(SendValidateCode, { phoneNum });
+    * sendLoginCode ({ payload }, { call, put }) {
+      const { phone } = payload;
+      const data = yield call(sendLoginCode, { uname: phone });
       if (data) {
         console.log(data);
       }

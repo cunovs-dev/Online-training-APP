@@ -19,6 +19,7 @@ const handleGoto = (dispatch, path = '', payload) => {
   }));
 };
 const handleGridClick = ({ path = '', text = '' }, dispatch) => {
+  console.log(path)
   dispatch(routerRedux.push({
     pathname: `/${path}`,
     query: {

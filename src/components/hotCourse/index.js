@@ -45,7 +45,7 @@ class HotCourse extends React.Component {
               key={`a_${i}`}
               onClick={this.props.handleClick.bind(null, data)}
             >
-              <Tag className={styles.tag} size="xs" text={data.tag} color="#2CCD5D" />
+              <Tag className={styles.tag} size="xs" text={data.yewu} color="#2CCD5D" />
               <img
                 ref={el => this.banner = el}
                 src={data.previewImage}

@@ -45,8 +45,8 @@ class Login extends React.Component {
 
   render () {
     const { form: { getFieldProps, getFieldError }, login: { buttonState } } = this.props,
-      userKey = 'phoneNum',
-      powerKey = 'usrPwd';
+      userKey = 'username',
+      powerKey = 'password';
     return (
       <div>
         <Tips title="登录" subTitle="欢迎再次回来" />
@@ -54,11 +54,10 @@ class Login extends React.Component {
           <form>
             <WingBlank size="md">
               <InputItem placeholder="手机号码"
-                         name="phoneNum"
                          {...getFieldProps(userKey, {
                            rules: [
                              { required: true, message: '请输入手机号码' },
-                             { pattern: pattern('phone'), message: '手机号码格式有误！' },
+                             // { pattern: pattern('phone'), message: '手机号码格式有误！' },
                            ],
                          })}
                          clear
@@ -81,7 +80,7 @@ class Login extends React.Component {
                 {...getFieldProps(powerKey, {
                   rules: [
                     { required: true, message: '密码必修输入' },
-                    { pattern: pattern('password'), message: '6-12位且包含数字、字母、特殊字符（~!@#$%^&*等）' },
+                    // { pattern: pattern('password'), message: '6-12位且包含数字、字母、特殊字符（~!@#$%^&*等）' },
                   ],
                 })}
                 clear

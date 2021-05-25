@@ -31,3 +31,4 @@ export async function GetStudyTime (payload) {
     data: payload,
   });
 }
+

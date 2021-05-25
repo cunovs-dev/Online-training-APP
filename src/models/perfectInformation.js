@@ -1,6 +1,6 @@
 import { parse } from 'qs';
 import modelExtend from 'dva-model-extend';
-// import { queryFolder } from 'services/resource';
+import { setInformationApi } from 'services/api';
 import { Toast } from 'components';
 import { model } from 'models/common';
 
@@ -14,25 +14,15 @@ export default modelExtend(model, {
     setup ({ dispatch, history }) {
       history.listen(({ pathname, query, action }) => {
         if (pathname === '/perfectInformation') {
-          dispatch({
-            type: 'updateState',
-            payload: {
-              contents: []
-            },
-          });
-          if (action === 'PUSH') {
-            dispatch({
-              type: 'query',
-            });
-          }
+
         }
       });
     },
   },
   effects: {
-    * query ({ payload }, { call, put, select }) {
-      // const { success, data, message = '获取数据失败，请稍后再试。' } = yield call(queryFolder, payload);
-      if (1) {
+    * setInformationApi ({ payload }, { call, put, select }) {
+      const { success, data, msg = '请稍后再试' } = yield call(setInformationApi, payload);
+      if (success) {
         yield put({
           type: 'updateState',
           payload: {
@@ -40,7 +30,7 @@ export default modelExtend(model, {
           }
         });
       } else {
-        // Toast.fail(message);
+        Toast.fail(msg);
       }
     },
   },
