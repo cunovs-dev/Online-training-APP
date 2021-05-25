@@ -17,7 +17,7 @@ class Refresh extends React.Component {
     super(props);
     this.state = {
       down: true,
-      height: 200,
+      height: '100vh',
       refreshing: props.refreshing,
     };
   }

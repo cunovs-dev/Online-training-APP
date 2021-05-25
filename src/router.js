@@ -168,6 +168,42 @@ const Routers = function ({ history, app }) {
           },
         },
         {
+          path: 'personal',
+          getComponent (nextState, cb) {
+            require.ensure([], (require) => {
+              registerModel(app, require('models/personal'));
+              cb(null, require('routes/personal/'));
+            }, 'personal');
+          },
+        },
+        {
+          path: 'collection',
+          getComponent (nextState, cb) {
+            require.ensure([], (require) => {
+              registerModel(app, require('models/collection'));
+              cb(null, require('routes/collection/'));
+            }, 'collection');
+          },
+        },
+        {
+          path: 'consumption',
+          getComponent (nextState, cb) {
+            require.ensure([], (require) => {
+              registerModel(app, require('models/consumption'));
+              cb(null, require('routes/consumption/'));
+            }, 'consumption');
+          },
+        },
+        {
+          path: 'lessons',
+          getComponent (nextState, cb) {
+            require.ensure([], (require) => {
+              registerModel(app, require('models/lessons'));
+              cb(null, require('routes/lessons/'));
+            }, 'lessons');
+          },
+        },
+        {
           path: 'perfectInformation',
           getComponent (nextState, cb) {
             require.ensure([], (require) => {

@@ -85,7 +85,7 @@ class register extends React.Component {
   render () {
     const { form: { getFieldProps, getFieldError }, login: { buttonState }, location: { query } } = this.props,
       { type = 'register' } = query,
-      userKey = 'phoneNum',
+      userKey = 'phone',
       powerKey = 'usrPwd',
       codeKey = 'code';
     return (

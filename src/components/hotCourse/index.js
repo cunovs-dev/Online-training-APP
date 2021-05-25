@@ -48,7 +48,7 @@ class HotCourse extends React.Component {
               <Tag className={styles.tag} size="xs" text={data.tag} color="#2CCD5D" />
               <img
                 ref={el => this.banner = el}
-                src={data.img}
+                src={data.previewImage}
                 alt=""
                 style={{ width: '100%', verticalAlign: 'top' }}
                 onLoad={() => {

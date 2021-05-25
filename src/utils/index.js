@@ -95,7 +95,7 @@ const pattern = (type) => {
   obj.svg = /mymobile/ig;
   obj.phone = /^1\d{10}$/;
   obj.email = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
-  obj.password=/^(?=.*\d)(?=.*[a-zA-Z])(?=.*[~!@#$%^&*])[\da-zA-Z~!@#$%^&*]{6,12}$/; //6-12 数字、字母、特殊字符
+  obj.password = /^(?=.*\d)(?=.*[a-zA-Z])(?=.*[~!@#$%^&*])[\da-zA-Z~!@#$%^&*]{6,12}$/; //6-12 数字、字母、特殊字符
   return obj[type];
 };
 
@@ -132,6 +132,7 @@ function getWebSocketUrl () {
     resolve(url);
   });
 }
+
 const renderSize = (fileSize) => {
   if (fileSize < 1024) {
     return `${fileSize}B`;
@@ -150,7 +151,7 @@ const renderSize = (fileSize) => {
 };
 const getCommonDate = (date, details = true, showWeek = true) => {
   if (date) {
-    let preDate = new Date(date * 1000),
+    let preDate = new Date(date),
       week = '日一二三四五六'.charAt(preDate.getDay()),
       year = preDate.getFullYear(),
       hour = preDate.getHours() < 10 ? `0${preDate.getHours()}` : preDate.getHours(),
@@ -179,5 +180,5 @@ module.exports = {
   getWebSocketUrl,
   pattern,
   renderSize,
-  getCommonDate
+  getCommonDate,
 };

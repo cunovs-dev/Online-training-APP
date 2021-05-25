@@ -10,15 +10,15 @@ import { WhiteSpace, List, Icon, Modal, Grid, Layout } from 'components';
 import { getImages, getErrorImg, getLocalIcon } from 'utils';
 import { routerRedux } from 'dva/router';
 import { baseURL, api } from 'utils/config';
-import styles from './index.less';
-import { handleBuildingClick } from 'utils/commonevents';
+import { mineGrid } from 'utils/defaults';
+import { handleGridClick,handleGoto } from 'utils/commonevents';
 import bg from '../../themes/images/others/mineBg.png';
+import styles from './index.less';
 
 const PrefixCls = 'mine';
 
 function Mine ({ location, dispatch, mine, app }) {
-  const { users: { username, useravatar }, isLogin } = app,
-    { gridData } = mine;
+  const { users: { username, useravatar }, isLogin } = app;
   const handleLogin = () => {
       dispatch(routerRedux.push({
         pathname: '/login',
@@ -71,20 +71,16 @@ function Mine ({ location, dispatch, mine, app }) {
         </div>
         <div className={styles.bottom}>
           <div className={styles.item}>
-            <p className={styles.num}>2</p>
-            <p className={styles.text}>优惠券</p>
-          </div>
-          <div className={styles.item}>
             <p className={styles.num}>92</p>
-            <p className={styles.text}>积分</p>
+            <p className={styles.text}>会员积分</p>
           </div>
-          <div className={styles.item}>
+          <div className={styles.item} onClick={() => handleGoto(dispatch, 'lessons', { name: '已学课程' })}>
             <p className={styles.num}>2</p>
-            <p className={styles.text}>课程</p>
+            <p className={styles.text}>已学课程</p>
           </div>
         </div>
       </div>
-      <Grid data={gridData} hasLine={false} activeStyle={false} onClick={() => handleBuildingClick(dispatch)} />
+      <Grid data={mineGrid} hasLine={false} activeStyle={false} onClick={(params) => handleGridClick(params, dispatch)} />
       <WhiteSpace size="lg" />
       <div className={styles[`${PrefixCls}-info`]}>
         <List>

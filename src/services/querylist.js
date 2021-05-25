@@ -1,109 +1,55 @@
 import { request, config } from 'utils';
 
 const { api } = config;
-const { QueryManuscriptApi, QueryColumnTypeApi, JicengshengyinApi, LanmuAllApi, GetTaskListApi, GetAllTaskApi, GetTowStupidApi, GetPatryWorkListApi, GetTowStupidListApi, GetVolunteerOrderApi, GettongjibumenApi, GetUnreadMessageApi, QueryMembersApi } = api;
+const { GetVocationalApi, RetrievalApi, SearchCourseApi, GetRecommendApi, GetRequiredCoursesApi, GetPosterApi, GetSceneApi } = api;
 
-export async function queryPartyData (payload) {
+export async function queryVocational (payload) {
   return request({
-    url: QueryManuscriptApi,
-    method: 'post',
-    data: payload,
-  });
-  return {};
-}
-
-export async function queryPartyTabs (payload) {
-  return request({
-    url: QueryColumnTypeApi,
+    url: GetVocationalApi,
     method: 'get',
     data: payload,
   });
 }
 
-export async function queryPatryList (payload) {
+export async function queryScene (payload) {
   return request({
-    url: QueryManuscriptApi,
-    method: 'post',
-    data: payload,
-  });
-}
-
-export async function getJicengshenying (payload) {
-  return request({
-    url: JicengshengyinApi,
-    method: 'get',
-    data: payload,
-  });
-}
-
-export async function getAllLanmu (payload) {
-  return request({
-    url: LanmuAllApi,
-    method: 'get',
-    data: payload,
-  });
-}
-
-export async function getTaskList (payload) {
-  return request({
-    url: GetTaskListApi,
-    method: 'get',
-    data: payload,
-  });
-}
-
-export async function getAllTask (payload) {
-  return request({
-    url: GetAllTaskApi,
+    url: GetSceneApi,
     method: 'get',
     data: payload,
   });
 }
 
 
-export async function GetTowStupid (payload) {
+export async function queryPoster (payload) {
   return request({
-    url: GetTowStupidApi,
+    url: GetPosterApi,
     method: 'get',
     data: payload,
   });
 }
-export async function GetTowStupidList (payload) {
+
+
+export async function queryRequiredCourses (payload) {
   return request({
-    url: GetTowStupidListApi,
-    method: 'post',
-    data: payload,
-  });
-}
-export async function GetPatryWorkList (payload) {
-  return request({
-    url: GetPatryWorkListApi,
+    url: GetRequiredCoursesApi,
     method: 'get',
     data: payload,
   });
 }
-export async function GetVolunteerOrder () {
+
+
+export async function queryRecommend (payload) {
   return request({
-    url: GetVolunteerOrderApi,
-    method: 'get',
-  });
-}
-export async function Gettongjibumen () {
-  return request({
-    url: GettongjibumenApi,
-    method: 'get',
-  });
-}
-export async function GetUnreadMessage () {
-  return request({
-    url: GetUnreadMessageApi,
-    method: 'get',
-  });
-}
-export async function QueryMembers (payload) {
-  return request({
-    url: QueryMembersApi,
+    url: GetRecommendApi,
     method: 'get',
     data: payload,
+  });
+}
+
+
+export async function queryVideoList (payload) {
+  const { id, type } = payload;
+  return request({
+    url: `${RetrievalApi}/${type}/${id}`,
   });
 }

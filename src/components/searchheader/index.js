@@ -14,7 +14,7 @@ const PrefixCls = 'searchheader';
 const SearchHeader = (props) => {
 
   return (
-    <div className={styles[`${PrefixCls}-outer`]}>
+    <div className={styles[`${PrefixCls}-outer`]} onClick={props.handlerClick}>
       <img className={styles.logo} src={logo} alt="" />
       <div className={styles[`${PrefixCls}-outer-search`]}>
         <Icon type="search" />

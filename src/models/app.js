@@ -39,7 +39,6 @@ export default {
     tabBars: [],
     updates: {},
     showModal: false,
-    noViewCount: 0,
   },
   subscriptions: {
     setupHistory ({ dispatch, history }) {
@@ -83,7 +82,6 @@ export default {
           payload: {
             users: {},
             isLogin: false,
-            noViewCount: 0,
           },
         });
         yield put(routerRedux.replace({

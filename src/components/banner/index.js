@@ -41,11 +41,11 @@ class Banner extends React.Component {
             >
               <img
                 ref={el => this.banner = el}
-                src={`${data}`}
+                src={`${data.imgSrc}`}
                 alt=""
                 style={{ width: '100%', verticalAlign: 'top' }}
               />
-              {this.props.hasTitle ? <div>{data.title}</div> : ''}
+              {this.props.hasTitle ? <div>{data.courseTitle}</div> : ''}
             </div>
           ))}
         </Carousel>

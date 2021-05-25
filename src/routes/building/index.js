@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'dva';
 import { WhiteSpace } from 'components';
 import Nav from 'components/nav';
-import styles from './index.less';
 
 const Building = ({ dispatch, building }) => {
   return (

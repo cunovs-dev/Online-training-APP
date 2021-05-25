@@ -1,14 +1,9 @@
 import { parse } from 'qs';
 import modelExtend from 'dva-model-extend';
+import * as Services from '../services/querylist';
 import { model } from 'models/common';
 
-const defaultBannerDatas = [
-  require('../themes/images/banner/banner1.png'),
-  require('../themes/images/banner/banner2.png'),
-  require('../themes/images/banner/banner3.png'),
-  require('../themes/images/banner/banner4.png'),
-];
-const hotBannerDatas = [
+const recommendData = [
   {
     title: 'title',
     img: require('../themes/images/hot/hot1.png'),
@@ -104,54 +99,29 @@ const defaultSpecialData = [
   },
 ];
 
-const defaultCarouseDatas = [
-  {
-    icon: require('../themes/images/grid/01.png'),
-    text: '社区',
-  },
-  {
-    icon: require('../themes/images/grid/02.png'),
-    text: '集市',
-  },
-  {
-    icon: require('../themes/images/grid/03.png'),
-    text: '商超',
-  }, {
-    icon: require('../themes/images/grid/04.png'),
-    text: '楼宇',
-  },
-  {
-    icon: require('../themes/images/grid/05.png'),
-    text: '校园',
-  },
-  {
-    icon: require('../themes/images/grid/06.png'),
-    text: '乡村',
-  },
-  {
-    icon: require('../themes/images/grid/07.png'),
-    text: '集团',
-  },
-  {
-    icon: require('../themes/images/grid/08.png'),
-    text: '交通',
-  },
-  {
-    icon: require('../themes/images/grid/09.png'),
-    text: '聚类',
-  },
-];
+const getGird = (data) => {
+  const res = [];
+  data.map(item => {
+    res.push({
+      ...item,
+      text: item.title,
+      icon: item.iconUri,
+    });
+  });
+  return res;
+};
+
 export default modelExtend(model, {
   namespace: 'dashboard',
 
   state: {
-    bannerDatas: [],
-    hotBannerDatas: [],
+    vocationalList: [],
+    sceneList: [],
+    posterData: [],
+    recommendData: [],
     newCourse: [],
     listData: [],
-    specialData: [],
-    infoDatas: [],
-    carouseDatas: [],
+    requiredData: [],
     selectKey: 0,
   },
 
@@ -167,19 +137,73 @@ export default modelExtend(model, {
     },
   },
   effects: {
-    * query ({ payload }, { call, put, select }) {
-      yield put({
-        type: 'updateState',
-        payload: {
-          bannerDatas: defaultBannerDatas,
-          hotBannerDatas,
-          newCourse: defaultNewCourse,
-          listData: defaultListData,
-          specialData: defaultSpecialData,
-          infoDatas: defaultInfoDatas,
-          carouseDatas: defaultCarouseDatas,
-        },
-      });
+    * query ({ payload }, { put, call }) {
+      const [vocational, scene, poster, recommend, requiredCourses] = yield ([
+        call(Services.queryVocational),
+        call(Services.queryScene),
+        call(Services.queryPoster),
+        call(Services.queryRecommend),
+        call(Services.queryRequiredCourses),
+      ]);
+      if (vocational.success) {
+        const { data } = vocational;
+        yield put({
+          type: 'updateState',
+          payload: {
+            vocationalList: [
+              { title: '首页', id: 0 },
+              ...data.data,
+            ],
+          },
+        });
+      }
+      if (scene.success) {
+        const { data } = scene;
+        yield put({
+          type: 'updateState',
+          payload: {
+            sceneList: getGird(data.data),
+          },
+        });
+      }
+      if (poster.success) {
+        const { data } = poster;
+        yield put({
+          type: 'updateState',
+          payload: {
+            posterData: data.data,
+          },
+        });
+      }
+      if (recommend.success) {
+        const { data } = recommend;
+        yield put({
+          type: 'updateState',
+          payload: {
+            recommendData: data.data,
+          },
+        });
+      }
+      if (requiredCourses.success) {
+        const { data } = requiredCourses;
+        yield put({
+          type: 'updateState',
+          payload: {
+            requiredData: data.data,
+          },
+        });
+      }
+    },
+    * queryList ({ payload }, { call, put }) {
+      const { data, success } = yield call(Services.queryVideoList, payload);
+      if (success) {
+        yield put({
+          type: 'updateState',
+          payload: {
+            listData: data.data,
+          },
+        });
+      }
     },
   },
 });

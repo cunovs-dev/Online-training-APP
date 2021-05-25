@@ -64,7 +64,7 @@ const Comp = ({ location, dispatch, documents, loading }) => {
     };
   return (
     <div>
-      <Nav title="工具" dispatch={dispatch} />
+      <Nav title="工具" isGoBack={false} dispatch={dispatch} />
       <MyDrawer dataCop={dataCop}>
         {list.length > 0 ? getContents(list) : <NoContent isLoading={loading} />}
       </MyDrawer>

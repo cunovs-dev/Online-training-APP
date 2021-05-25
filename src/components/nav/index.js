@@ -18,10 +18,10 @@ function Nav (props) {
       <div className={styles[`${PrefixCls}-header-box`]}>
         <div className={styles[`${PrefixCls}-header`]}>
           <NavBar
-            leftContent="返回"
-            onLeftClick={goBack}
+            leftContent=""
+            onLeftClick={props.isGoBack ? () => goBack() : null}
             mode="dark"
-            icon={<Icon type="left" />}
+            icon={props.isGoBack ? <Icon type="left" color="#fff" /> : props.icon}
             rightContent={props.renderNavRight}
           >{props.title}</NavBar>
         </div>
@@ -29,6 +29,7 @@ function Nav (props) {
     </div>
   );
 }
+
 Nav.propTypes = {
   dispatch: PropTypes.func.isRequired,
 };
@@ -36,5 +37,7 @@ Nav.defaultProps = {
   renderNavRight: null,
   title: '',
   navEvent: null,
+  isGoBack: true,
+  icon: null,
 };
 export default Nav;

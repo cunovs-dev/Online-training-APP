@@ -27,7 +27,7 @@ const overlay = [
 
 const VideoListView = (props) => {
 
-  const { listData, hasMore, scrollerTop, onRefresh, onEndReached, onScrollerTop, loading, dispatch } = props,
+  const { listData, hasMore, scrollerTop, onRefresh, onEndReached, onScrollerTop, loading, dispatch,selectable=true } = props,
 
     getContents = (lists) => (
       <ListView
@@ -48,7 +48,7 @@ const VideoListView = (props) => {
   return (
     <div>
       <div className={styles.outer}>
-        <SelectBox title='排序' defaultChoice="最受欢迎" overlay={overlay} />
+        {selectable? <SelectBox title='排序' defaultChoice="最受欢迎" overlay={overlay} />:null}
         <WhiteSpace size="xs" />
         {listData.length > 0 ? getContents(listData) : <NoContent isLoading={loading} />}
       </div>

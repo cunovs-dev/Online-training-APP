@@ -11,9 +11,9 @@ const PrefixCls = 'infobox';
 const InfoBox = (props) => {
   return (
     <div className={styles[`${PrefixCls}-outer`]} onClick={props.handleClick}>
-      <div className={styles[`${PrefixCls}-outer-image`]} style={{ backgroundImage: `url(${props.image})` }} />
+      <div className={styles[`${PrefixCls}-outer-image`]} style={{ backgroundImage: `url(${props.previewImage})` }} />
       <div className={styles[`${PrefixCls}-outer-content`]}>
-        <h3>{props.text}</h3>
+        <h3>{props.videoName}</h3>
         <div className={styles[`${PrefixCls}-outer-question`]}>{props.question}</div>
       </div>
       <Tag className={styles.tag} size="xs" text={props.tag} color="#2CCD5D" />

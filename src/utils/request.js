@@ -2,7 +2,6 @@
 import { hashHistory } from 'react-router';
 import axios from 'axios';
 import qs from 'qs';
-import jsonp from 'jsonp';
 import lodash from 'lodash';
 import pathToRegexp from 'path-to-regexp';
 import { Toast } from 'antd-mobile';

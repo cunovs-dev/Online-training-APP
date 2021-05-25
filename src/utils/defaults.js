@@ -75,5 +75,27 @@ const defaultShortBoard = [
   { title: '统筹策划力' },
 ];
 
+const mineGrid = [
+  {
+    icon: require('../themes/images/others/history.png'),
+    text: '个人信息',
+    path: 'personal',
+  },
+  {
+    icon: require('../themes/images/others/course.png'),
+    text: '我的收藏',
+    path: 'collection',
+  },
+  {
+    icon: require('../themes/images/others/note.png'),
+    text: '能力测试',
+    path: 'collection',
+  }, {
+    icon: require('../themes/images/others/credit.png'),
+    text: '消费记录',
+    path: 'consumption',
+  },
+];
 
-export default { defaultTabBars, defaultBusiness, defaultScene, defaultShortBoard };
+
+export default { defaultTabBars, defaultBusiness, defaultScene, defaultShortBoard, mineGrid };
