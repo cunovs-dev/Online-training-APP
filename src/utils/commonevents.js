@@ -18,14 +18,28 @@ const handleGoto = (dispatch, path = '', payload) => {
     query: payload,
   }));
 };
-const handleGridClick = ({ path = '', text = '' }, dispatch) => {
-  console.log(path)
-  dispatch(routerRedux.push({
-    pathname: `/${path}`,
-    query: {
-      name: `${text}`,
-    },
-  }));
+const handleGridClick = ({ path = '', text = '', id, fetchType }, dispatch) => {
+  if (path !== '') {
+    if (path.startsWith('http')) {
+      cnOpen(path);
+    } else {
+      dispatch(routerRedux.push({
+        pathname: `/${path}`,
+        query: {
+          name: `${text}`,
+        },
+      }));
+    }
+  } else if (fetchType === 'cj') {
+    dispatch(routerRedux.push({
+      pathname: `/videoList`,
+      query: {
+        name: `${text}`,
+        id,
+        fetchType,
+      },
+    }));
+  }
 };
 const handleListClick = (data, dispatch) => {
   const { route = '', text = '' } = data;

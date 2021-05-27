@@ -1,6 +1,6 @@
 import { request, config } from 'utils';
 
-const { api: { AppBaseApi, userLogout, PostGuijiApi, GetStudyTimeApi } } = config;
+const { api: { AppBaseApi, LogoutApi, GetDirectionApi,  } } = config;
 
 export async function queryAppbase (payload) {
   return request({
@@ -10,25 +10,20 @@ export async function queryAppbase (payload) {
   });
 }
 
+export async function queryDirection (payload) {
+  return request({
+    url: GetDirectionApi,
+    method: 'get',
+    data: payload,
+  });
+}
+
 export async function logout () {
   return request({
-    url: userLogout,
+    url: LogoutApi,
     method: 'get',
   });
 }
 
-export async function guiji (payload) {
-  return request({
-    url: PostGuijiApi,
-    method: 'Post',
-    data: payload,
-  });
-}
-export async function GetStudyTime (payload) {
-  return request({
-    url: GetStudyTimeApi,
-    method: 'get',
-    data: payload,
-  });
-}
+
 

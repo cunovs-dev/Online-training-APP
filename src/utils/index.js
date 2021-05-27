@@ -7,8 +7,8 @@ import defaultUserIcon from 'themes/images/default/userIcon.jpg';
 import formsubmit from './formsubmit';
 
 
-const { userTag: { username, usertoken, userid, useravatar, usertype } } = config,
-  { _cs, _cr} = cookie;
+const { userTag: { userName, userToken, userId, photoPath }, baseURL } = config,
+  { _cs, _cr } = cookie;
 // 连字符转驼峰
 String.prototype.hyphenToHump = function () {
   return this.replace(/-(\w)/g, (...args) => {
@@ -56,26 +56,19 @@ const getImages = (path = '', type = 'defaultImg') => {
     : (config.baseURL + (path.startsWith('/') ? '' : '/') + path);
 };
 
-const getErrorImg = (el) => {
+const getErrorImg = (el,type='defaultImg') => {
+  console.log(el)
   if (el && el.target) {
-    el.target.src = defaultImg;
+    el.target.src = type === 'defaultImg' ? defaultImg : defaultUserIcon;
     el.target.onerror = null;
   }
 };
 
-const setLoginIn = ({ user_token, user_name, user_power, user_id, user_avatar, user_type }) => {
-  _cs(username, user_name);
-  _cs(usertoken, user_token);
-  _cs(userid, user_id);
-  _cs(useravatar, user_avatar);
-  _cs(usertype, user_type);
-};
 const setLoginOut = () => {
-  _cr(username);
-  _cr(usertoken);
-  _cr(userid);
-  _cr(useravatar);
-  _cr(usertype);
+  _cr(userName);
+  _cr(userToken);
+  _cr(userId);
+  _cr(photoPath);
 };
 
 const setSession = (obj) => {
@@ -157,6 +150,18 @@ const getVideoTips = (arr = [], id) => {
   return arr.find(item => item.id === id).title || '';
 };
 
+const filterArr = (arr1 = [], arr2 = []) => {
+  if (arr1.length > 0 && arr2.length > 0) {
+    const res = [];
+    arr1.map(item => {
+      if (arr2.find(ev => ev.id === item)) {
+        res.push(arr2.find(ev => ev.id === item));
+      }
+    });
+    return res;
+  }
+  return [];
+};
 
 module.exports = {
   config,
@@ -164,12 +169,12 @@ module.exports = {
   cookie,
   getErrorImg,
   getImages,
-  setLoginIn,
   getOffsetTopByBody,
   getLocalIcon,
   formsubmit,
   setLoginOut,
   pattern,
+  filterArr,
   getVideoTips,
   renderSize,
   getCommonDate,

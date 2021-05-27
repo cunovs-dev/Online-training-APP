@@ -16,7 +16,7 @@ const InfoBox = (props) => {
         <h3>{props.videoName}</h3>
         <div className={styles[`${PrefixCls}-outer-question`]}>{props.question}</div>
       </div>
-      <Tag className={styles.tag} size="xs" text={props.tag} color="#2CCD5D" />
+      <Tag className={styles.tag} size="xs" text={props.addresses} color="#2CCD5D" />
     </div>
   );
 };

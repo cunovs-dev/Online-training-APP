@@ -7,8 +7,9 @@ import { Toast } from 'antd-mobile';
 import { _cg } from './cookie';
 import { baseURL, userTag } from './config';
 
-const token = _cg('userPwd')?_cg('userPwd').split(',') :'cnv-token,token'.split(',');
-
+const { userToken } = userTag;
+const token = _cg(userToken) ? _cg(userToken)
+  .split(',') : 'cnv-token,token'.split(',');
 axios.defaults.baseURL = baseURL;
 axios.defaults.headers.common[`${token[0]}`] = `${token[1]}`;
 axios.defaults.withCredentials = true;
@@ -20,7 +21,6 @@ const fetch = (options) => {
   let {
     method = 'get',
     data,
-    fetchType,
     url,
   } = options;
 
@@ -47,7 +47,12 @@ const fetch = (options) => {
 
   switch (method.toLowerCase()) {
     case 'get':
-      return axios.get(url, { params: cloneData });
+      return axios.get(url, { params: cloneData },
+        {
+          headers: {
+            'x-requested-with': 'XMLHttpRequest',
+          },
+        });
     case 'delete':
       return axios.delete(url, {
         data: cloneData,
@@ -125,6 +130,9 @@ export default function request (options) {
       if (response && response instanceof Object) {
         const { data, statusText } = response;
         statusCode = response.status;
+        if (statusCode === 401) {
+          hashHistory.replace('/login');
+        }
         msg = getResponeseErrMsg(statusCode) || statusText;
       }
       return Promise.reject({ success: false, statusCode, message: msg });

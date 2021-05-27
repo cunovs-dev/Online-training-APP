@@ -1,6 +1,5 @@
 import modelExtend from 'dva-model-extend';
 import { model } from 'models/common';
-import dashboard from './dashboard';
 
 const getViewIamges = (text) => {
     const result = [];

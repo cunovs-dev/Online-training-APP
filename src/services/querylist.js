@@ -1,7 +1,7 @@
 import { request, config } from 'utils';
 
 const { api } = config;
-const { RetrievalApi, SearchCourseApi, GetRecommendApi, GetRequiredCoursesApi, GetPosterApi } = api;
+const { RetrievalApi, SearchApi, GetRecommendApi, GetRequiredCoursesApi, GetPosterApi, GetHistoryApi, CollectionApi } = api;
 
 
 export async function queryPoster (payload) {
@@ -30,10 +30,34 @@ export async function queryRecommend (payload) {
   });
 }
 
-
-export async function queryVideoList (payload) {
-  const { id, type } = payload;
+export async function queryHistory (payload) {
   return request({
-    url: `${RetrievalApi}/${type}/${id}`,
+    url: GetHistoryApi,
+    method: 'get',
+    data: payload,
   });
 }
+
+export async function queryCollection (payload) {
+  return request({
+    url: CollectionApi,
+    method: 'get',
+    data: payload,
+  });
+}
+
+export async function queryVideoList (payload) {
+  const { id, type, nowPage = 1, pageSize = 10, sort = 0 } = payload;
+  return request({
+    url: `${RetrievalApi}/${type}/${id}?nowPage=${nowPage}&pageSize=${pageSize}&sort=${sort}`,
+  });
+}
+
+export async function search (data) {
+  return request({
+    url: SearchApi,
+    method: 'post',
+    data,
+  });
+}
+

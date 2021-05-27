@@ -33,17 +33,24 @@ export default modelExtend(pageModel, {
       });
       const { phone, code = '' } = payload;
       const { data, success, msg } = yield call(login, { username: phone, code }, true);
-      const { userPwd, userId, userRealName, photoPath } = data;
+      const { userPwd, userId, userRealName:userName, userPhone, photoPath } = data;
       if (success) {
-        yield setSession({
+        setSession({
           userPwd,
           userId,
-          userRealName,
+          userName,
           photoPath,
+          userPhone,
         });
         yield put(routerRedux.push({
           pathname: '/',
         }));
+        yield put({
+          type: 'updateState',
+          payload: {
+            buttonState: true,
+          },
+        });
       } else {
         yield put({
           type: 'updateState',

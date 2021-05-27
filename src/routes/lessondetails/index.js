@@ -5,18 +5,15 @@
  */
 import React from 'react';
 import { connect } from 'dva';
-import { routerRedux } from 'dva/router';
 import TitleBox from 'components/titlecontainer';
 import { Tabs, WhiteSpace, Badge, Icon, Toast } from 'components';
 import Tag from 'components/tag';
 import Praise from 'components/praise';
 import ReactDOM from 'react-dom';
 import { myNoteRow } from 'components/row';
-import { handleGoto, handleBuildingClick } from 'utils/commonevents';
+import { handleGoto } from 'utils/commonevents';
 import { getOffsetTopByBody, getLocalIcon } from 'utils';
 import Photo from 'components/photo';
-import video from './jquery.mp4';
-import pic from './pic.jpg';
 import Collection from 'components/collection';
 import ApplicationBox from 'components/applicationBox';
 import TransparentHeader from 'components/transparentheader';
@@ -76,59 +73,68 @@ class LessonDetails extends React.Component {
     };
   }
 
-  handlePraiseClick = () => {
+  collectClick = () => {
+    const { location: { query }, lessondetails: { infoData } } = this.props;
+    const { id } = query;
+    const { isCollect } = infoData;
     this.props.dispatch({
-      type: 'lessondetails/updateState',
+      type: 'lessondetails/collect',
       payload: {
-        isPraise: true,
+        videoId: id,
+        isCollect: !Boolean(Number(isCollect)),
       },
     });
   };
-  collectClick = () => {
+  praiseClick = () => {
+    const { location: { query }, lessondetails: { infoData } } = this.props;
+    const { id } = query;
+    const { isPraise } = infoData;
     this.props.dispatch({
-      type: 'lessondetails/updateState',
+      type: 'lessondetails/praise',
       payload: {
-        isCollect: true,
+        videoId: id,
+        isPraise: !Boolean(Number(isPraise)),
       },
     });
   };
 
   getChildren = (arr) => (
     arr && arr.map((data, i) => <InfoBox key={i} {...data}
-                                         handleClick={handleBuildingClick.bind(null, this.props.dispatch)} />)
+                                         handleClick={() => handleGoto(this.props.dispatch, 'lessondetails', { id: data.videoId })} />)
   );
 
   render () {
-    const { isPraise, isCollect, infoData } = this.props.lessondetails;
+    const { infoData, recommendData } = this.props.lessondetails;
+    const { videoName, scene, yewu, praise, previewImage, videoSrc, question, isCollect, isPraise } = infoData;
     const praiseProps = {
-      isPraise,
-      num: 0,
-      handlePraiseClick: this.handlePraiseClick,
+      isPraise: Boolean(Number(isPraise)),
+      num: praise,
+      handlePraiseClick: this.praiseClick,
     };
-    const getvideo = () => {
+    const getvideo = (pic, src) => {
       return (
-        <video key={1}
-               ref={el => this.video = el}
-               width="100%"
-               preload="none"
-               poster={pic}
-               src={video}
-               controlsList="nodownload"
-               controls="controls"
+        <video
+          ref={el => this.video = el}
+          width="100%"
+          preload="none"
+          poster={pic}
+          src={src}
+          controlsList="nodownload"
+          controls="controls"
         />
       );
     };
     const renderSup = () => (
       <div className={styles.extra}>
         <Praise {...praiseProps} />
-        <Collection isCollect={isCollect} handlerClick={this.collectClick} />
+        <Collection isCollect={Boolean(Number(isCollect))} handlerClick={this.collectClick} />
       </div>
     );
     return (
       <div className={styles[`${PrefixCls}-outer`]}>
         <TransparentHeader dispatch={this.props.dispatch} offset={this.state.tabOffset} />
         <div>
-          {getvideo()}
+          {getvideo(previewImage, videoSrc)}
         </div>
         <Tabs
           tabs={tabs}
@@ -144,9 +150,9 @@ class LessonDetails extends React.Component {
             <WhiteSpace size='md' />
             <TitleBox title="基本信息" sup={renderSup()} />
             <div className={styles.baseInfo}>
-              <Tag className={styles.tag} size="xs" text="个人能力" color="green" />
-              <div className={styles.title}>云知梦教学总监</div>
-              <div className={styles.question}>中国PHP高效培训第一人</div>
+              <Tag className={styles.tag} size="xs" text={scene} color="green" />
+              <div className={styles.title}>{videoName}</div>
+              <div className={styles.question}>{question}</div>
             </div>
             <WhiteSpace size='md' />
             <TitleBox title="知识贡献者" sup="" />
@@ -155,7 +161,7 @@ class LessonDetails extends React.Component {
               type="user" name="戴志欢" />
             <Container
               title="猜你喜欢"
-              children={this.getChildren(infoData)}
+              children={this.getChildren(recommendData)}
               moreClick={() => handleGoto(this.props.dispatch, 'videoList', { name: '猜你喜欢' })}
             />
           </div>
@@ -163,7 +169,7 @@ class LessonDetails extends React.Component {
           <div ref={el => this.vl = el} style={{ height: this.state.height }}>
             <WhiteSpace size='md' />
             {
-              applies.map(item => <div key={item.name} ><ApplicationBox
+              applies.map(item => <div key={item.name}><ApplicationBox
                 title={item.name}
                 handlerClick={() => handleGoto(this.props.dispatch, 'application', {
                   name: item.name,
@@ -172,16 +178,6 @@ class LessonDetails extends React.Component {
                 <WhiteSpace />
               </div>)
             }
-            {/*<div className={styles.question}>*/}
-            {/*<div className={styles.title}>*/}
-            {/*<Icon style={{ marginRight: 10 }} size="lg" type={getLocalIcon('/components/question.svg')} />*/}
-            {/*课后检测*/}
-            {/*</div>*/}
-            {/*<div className={styles.content}>*/}
-            {/*客户需求交流的四个环节是什么？*/}
-            {/*</div>*/}
-            {/*<Recognition />*/}
-            {/*</div>*/}
           </div>
         </Tabs>
       </div>

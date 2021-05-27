@@ -2,7 +2,7 @@
 import Cookie from 'js-cookie';
 import { userTag } from './config';
 
-const { usertoken } = userTag,
+const { userToken } = userTag,
   has = () => typeof (localStorage) !== 'undefined',
   set = (key, value) => {
     if (has) {
@@ -38,7 +38,7 @@ export const _cr = (key) => {
 };
 
 export const _cg = (key) => {
-  const cf = usertoken !== key, // 先从cookie中获取
+  const cf = userToken !== key, // 先从cookie中获取
     v = cf ? Cookie.get(key) : get(key);
   return v && v !== 'undefined' ? v : ((cf ? get(key) : Cookie.get(key)) || '');
 };

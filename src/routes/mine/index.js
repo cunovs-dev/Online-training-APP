@@ -9,44 +9,24 @@ import { connect } from 'dva';
 import { WhiteSpace, List, Icon, Modal, Grid, Layout } from 'components';
 import { getImages, getErrorImg, getLocalIcon } from 'utils';
 import { routerRedux } from 'dva/router';
-import { baseURL, api } from 'utils/config';
 import { mineGrid } from 'utils/defaults';
-import { handleGridClick,handleGoto } from 'utils/commonevents';
+import { _cg } from 'utils/cookie';
+import { handleGridClick, handleGoto } from 'utils/commonevents';
 import bg from '../../themes/images/others/mineBg.png';
 import styles from './index.less';
 
 const PrefixCls = 'mine';
 
 function Mine ({ location, dispatch, mine, app }) {
-  const { users: { username, useravatar }, isLogin } = app;
-  const handleLogin = () => {
-      dispatch(routerRedux.push({
-        pathname: '/login',
-      }));
-    },
-    handleLoginout = () => {
-      dispatch({
-        type: 'app/logout',
-      });
-    },
-    handleSetupClick = ({ name = '个人设置' }) => {
-      dispatch(routerRedux.push({
-        pathname: '/setup',
-        query: {
-          name,
-        },
-      }));
-    },
-    showAlert = () => {
-      Modal.alert('退出', '离开我的阿拉善', [
-        {
-          text: '残忍退出',
-          onPress: handleLoginout,
-        },
-        { text: '再看看', onPress: () => console.log('cancel') },
-
-      ]);
-    };
+  const { users: { userName, photoPath } } = app;
+  const handleSetupClick = ({ name = '个人设置' }) => {
+    dispatch(routerRedux.push({
+      pathname: '/setup',
+      query: {
+        name,
+      },
+    }));
+  };
   return (
     <div className={styles.container} style={{ backgroundImage: `url(${bg})` }}>
       <div className={styles.top}>
@@ -56,15 +36,10 @@ function Mine ({ location, dispatch, mine, app }) {
       </div>
       <div className={styles[`${PrefixCls}-infoBox`]}>
         <div className={styles.info}>
-          <img src={getImages(useravatar, 'user')} alt="" />
+          <img src={getImages(photoPath, 'user')} alt="" onError={(el)=>getErrorImg(el,'user')} />
           <div className={styles.right}>
             <div className={styles.name}>
-              {
-                isLogin ?
-                  <span onClick={showAlert}>李一桐</span>
-                  :
-                  <span onClick={handleLogin}>登录/注册</span>
-              }
+              <span>{userName}</span>
             </div>
             <div className={styles.level}>成长记录</div>
           </div>
@@ -74,20 +49,21 @@ function Mine ({ location, dispatch, mine, app }) {
             <p className={styles.num}>92</p>
             <p className={styles.text}>会员积分</p>
           </div>
-          <div className={styles.item} onClick={() => handleGoto(dispatch, 'lessons', { name: '已学课程' })}>
+          <div className={styles.item}
+               onClick={() => handleGoto(dispatch, 'videoList', { name: '已学课程', fetchType: 'history' })}>
             <p className={styles.num}>2</p>
             <p className={styles.text}>已学课程</p>
           </div>
         </div>
       </div>
-      <Grid data={mineGrid} hasLine={false} activeStyle={false} onClick={(params) => handleGridClick(params, dispatch)} />
+      <Grid data={mineGrid} hasLine={false} activeStyle={false}
+            onClick={(params) => handleGridClick(params, dispatch)} />
       <WhiteSpace size="lg" />
       <div className={styles[`${PrefixCls}-info`]}>
         <List>
           <List.Item
             thumb={<Icon type={getLocalIcon('/mine/aboutus.svg')} />}
             arrow="horizontal"
-            onClick={() => handleBuildingClick(dispatch)}
           >
             关于我们
           </List.Item>

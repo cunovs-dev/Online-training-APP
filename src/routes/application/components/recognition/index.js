@@ -102,7 +102,6 @@ class Recognition extends Component {
   };
 
   mediaFileOnSuccess (data) {
-    console.log(data);
     const { answer = '' } = this.state;
     this.setState({
       answer: `${answer}${data}`,

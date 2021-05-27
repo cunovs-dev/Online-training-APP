@@ -3,6 +3,12 @@
  * @date 2021/04/25 09:59:38
  * @Description:
  */
+import { config } from 'utils';
+import { _cg } from './cookie';
+
+const { questionnaireURL,userTag: { userToken} } = config;
+const questionnairePath = `${questionnaireURL}?token=${_cg(userToken)}`;
+
 const defaultTabBars = [{
   title: '首页',
   key: 1,
@@ -69,16 +75,16 @@ const defaultScene = [
 ];
 
 const defaultSceneIcon = {
-    7: require('../themes/images/grid/01.png'),
-    8: require('../themes/images/grid/02.png'),
-    9: require('../themes/images/grid/03.png'),
-    10: require('../themes/images/grid/04.png'),
-    11: require('../themes/images/grid/05.png'),
-    2: require('../themes/images/grid/06.png'),
-    1: require('../themes/images/grid/07.png'),
-    4: require('../themes/images/grid/08.png'),
-    3: require('../themes/images/grid/09.png'),
-  }
+  7: require('../themes/images/grid/01.png'),
+  8: require('../themes/images/grid/02.png'),
+  9: require('../themes/images/grid/03.png'),
+  10: require('../themes/images/grid/04.png'),
+  11: require('../themes/images/grid/05.png'),
+  2: require('../themes/images/grid/06.png'),
+  1: require('../themes/images/grid/07.png'),
+  4: require('../themes/images/grid/08.png'),
+  3: require('../themes/images/grid/09.png'),
+};
 
 
 const defaultShortBoard = [
@@ -102,7 +108,7 @@ const mineGrid = [
   {
     icon: require('../themes/images/others/note.png'),
     text: '能力测试',
-    path: 'collection',
+    path: questionnairePath,
   }, {
     icon: require('../themes/images/others/credit.png'),
     text: '消费记录',
@@ -111,4 +117,12 @@ const mineGrid = [
 ];
 
 
-export default { defaultTabBars, defaultBusiness, defaultSceneIcon,defaultScene, defaultShortBoard, mineGrid };
+export default {
+  questionnairePath,
+  defaultTabBars,
+  defaultBusiness,
+  defaultSceneIcon,
+  defaultScene,
+  defaultShortBoard,
+  mineGrid,
+};

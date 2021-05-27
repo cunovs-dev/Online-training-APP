@@ -1,10 +1,6 @@
 import modelExtend from 'dva-model-extend';
 import { model } from 'models/common';
 import { config, cookie } from 'utils';
-import { Toast } from 'antd-mobile';
-
-const { _cs } = cookie,
-  { userTag: { username } } = config;
 
 export default modelExtend(model, {
   namespace: 'setup',

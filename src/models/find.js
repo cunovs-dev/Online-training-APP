@@ -1,13 +1,22 @@
 import { parse } from 'qs';
 import modelExtend from 'dva-model-extend';
-// import { queryFolder } from 'services/resource';
+import { search } from 'services/querylist';
 import { Toast } from 'components';
 import { model } from 'models/common';
 
+const getDefaultPaginations = () => ({
+  nowPage: 1,
+  pageSize: 10,
+});
+const namespace = 'find';
 export default modelExtend(model, {
-  namespace: 'find',
+  namespace,
   state: {
-    list: []
+    listData: [],
+    refreshing: false,
+    scrollTop: 0,
+    paginations: getDefaultPaginations(),
+    hasMore: true,
   },
 
   subscriptions: {
@@ -17,30 +26,52 @@ export default modelExtend(model, {
           dispatch({
             type: 'updateState',
             payload: {
-              contents: []
+              listData: [],
+              refreshing: false,
+              scrollTop: 0,
+              paginations: getDefaultPaginations(),
             },
           });
-          if (action === 'PUSH') {
-            dispatch({
-              type: 'query',
-            });
-          }
         }
       });
     },
   },
   effects: {
-    * query ({ payload }, { call, put, select }) {
-      // const { success, data, message = '获取数据失败，请稍后再试。' } = yield call(queryFolder, payload);
-      if (1) {
+    * search ({ payload, callback }, { call, put, select }) {
+      const { isRefresh = false } = payload,
+        _this = yield select(_ => _[`${namespace}`]),
+        { paginations: { nowPage, pageSize }, listData } = _this,
+        start = isRefresh ? getDefaultPaginations().nowPage : nowPage;
+      const { success, data: res, msg = '获取数据失败，请稍后再试。' } = yield call(search, {
+        ...payload,
+        nowPage: start,
+        pageSize,
+      });
+      if (success) {
+        const { data = [] } = res;
+        let newLists = [];
+        newLists = start === getDefaultPaginations().nowPage ? data : [...listData, ...data];
         yield put({
           type: 'updateState',
           payload: {
-            list: []
-          }
+            hasMore: data.length === getDefaultPaginations().pageSize,
+          },
         });
+        if (data.length !== 0) {
+          yield put({
+            type: 'updateState',
+            payload: {
+              paginations: {
+                ..._this.paginations,
+                nowPage: start + 1,
+              },
+              listData: newLists,
+            },
+          });
+        }
+        if (callback) callback();
       } else {
-        // Toast.fail(message);
+        Toast.fail(msg || '获取失败');
       }
     },
   },

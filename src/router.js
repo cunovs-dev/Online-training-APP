@@ -187,15 +187,6 @@ const Routers = function ({ history, app }) {
           },
         },
         {
-          path: 'lessons',
-          getComponent (nextState, cb) {
-            require.ensure([], (require) => {
-              registerModel(app, require('models/lessons'));
-              cb(null, require('routes/lessons/'));
-            }, 'lessons');
-          },
-        },
-        {
           path: 'perfectInformation',
           getComponent (nextState, cb) {
             require.ensure([], (require) => {

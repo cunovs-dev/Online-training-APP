@@ -1,23 +1,19 @@
 import { routerRedux } from 'dva/router';
 import { parse } from 'qs';
 import { config, cookie, setLoginOut } from 'utils';
+import { logout } from 'services/app';
 import { defaultTabBarIcon, defaultTabBars } from 'utils/defaults';
 
 
-const { userTag: { username, usertoken, userid, useravatar, usertype } } = config,
+const { userTag: { userName, userToken, userId, photoPath } } = config,
   { _cg } = cookie,
   getInfoUser = () => {
     const result = {};
-    result[username] = _cg(username);
-    result[usertoken] = _cg(usertoken);
-    result[userid] = _cg(userid);
-    result[useravatar] = _cg(useravatar);
-    result[usertype] = _cg(usertype);
+    result[userName] = _cg(userName);
+    result[userId] = _cg(userId);
+    result[photoPath] = _cg(photoPath);
+    result[userToken] = _cg(userToken);
     return result;
-  },
-  getUserLoginStatus = (users = '') => {
-    users = users || getInfoUser();
-    return users[userid] !== '' && users[usertoken] !== '' && users[username] !== '';
   },
   appendIcon = (tar, i) => {
     let { icon = '', selectedIcon = '', route = '/default' } = tar;
@@ -34,7 +30,8 @@ export default {
   state: {
     vocationalList: [],
     sceneList: [],
-    isLogin: getUserLoginStatus(),
+    weaknessList: [],
+    selfChoice: {},
     users: getInfoUser(),
     tabBars: [],
     updates: {},
@@ -43,7 +40,7 @@ export default {
   subscriptions: {
     setupHistory ({ dispatch, history }) {
       const others = {};
-      others[usertoken] = _cg(usertoken);
+      others[userToken] = _cg(userToken);
       dispatch({
         type: 'query',
         payload: {
@@ -76,20 +73,11 @@ export default {
       const data = yield call(logout);
       if (data) {
         setLoginOut();
-        yield put({
-          type: 'updateState',
-          payload: {
-            users: {},
-            isLogin: false,
-          },
-        });
         yield put(routerRedux.replace({
           pathname: '/login',
         }));
       }
     },
-
-
   },
   reducers: {
     updateState (state, { payload }) {
@@ -102,12 +90,10 @@ export default {
       let { users: appendUsers = getInfoUser(), others = {} } = payload,
         { users } = state;
       users = { ...users, ...appendUsers };
-      let isLogin = getUserLoginStatus(users);
       return {
         ...state,
         ...others,
         users,
-        isLogin,
       };
     },
   },

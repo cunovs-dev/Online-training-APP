@@ -2,66 +2,38 @@ import { parse } from 'qs';
 import { model } from 'models/common';
 import { Toast } from 'components';
 import modelExtend from 'dva-model-extend';
-import { getAttendance } from '../services/app';
+import { queryCollection } from 'services/querylist';
 
-const defaultListData = [
-  {
-    image: require('../themes/images/list/01.jpg'),
-    title: 'Web前端开发之JavaScript精英课堂【渡一教育】',
-    price: '240',
-    people: '2480',
-  },
-  {
-    image: require('../themes/images/list/02.jpg'),
-    title: '淘宝运营 引爆店铺免费流量 搜索排名 直通车新玩法【思睿电商】',
-    price: '140',
-    people: '5125',
-  },
-  {
-    image: require('../themes/images/list/03.jpg'),
-    title: 'Sai商业插画班、萌系漫画、Q版设计三位老师传授二次元绘画秘籍',
-    price: '20',
-    people: '1230',
-  },
-  {
-    image: require('../themes/images/list/04.jpg'),
-    title: '摄影拍摄/摄影后期修图/人像后期/影楼后期/PS商业修图/风光调色',
-    price: '99',
-    people: '254',
-  },
-  {
-    image: require('../themes/images/list/05.png'),
-    title: '（今晚直播）3DMAX建模效果图 CAD VRAY PS 室内设计 家装工装',
-    price: '34',
-    people: '23',
-  },
-
-];
-
+const getDefaultPaginations = () => ({
+  nowPage: 1,
+  pageSize: 10,
+});
+const namespace = 'collection';
 export default modelExtend(model, {
-  namespace: 'collection',
+  namespace,
   state: {
     listData: [],
     refreshing: false,
     scrollTop: 0,
+    paginations: getDefaultPaginations(),
+    hasMore: true,
   },
   subscriptions: {
     setup ({ dispatch, history }) {
       history.listen(({ pathname, query, action }) => {
-        const { courseid = '' } = query;
         if (pathname === '/collection') {
           if (action === 'PUSH') {
             dispatch({
               type: 'updateState',
               payload: {
-                data: {},
+                listData: [],
+                refreshing: false,
+                scrollTop: 0,
+                paginations: getDefaultPaginations(),
               },
             });
             dispatch({
-              type: 'fetch',
-              payload: {
-                courseid,
-              },
+              type: 'queryList'
             });
           }
         }
@@ -70,25 +42,42 @@ export default modelExtend(model, {
   },
 
   effects: {
-    * fetch ({ payload }, { call, put, select }) {
-      // const { users: { userid } } = yield select(_ => _.app),
-      //   data = yield call(getAttendance, { ...payload, userid });
-      // if (data.success) {
-      //   yield put({
-      //     type: 'updateState',
-      //     payload: {
-      //       data: data || {}
-      //     }
-      //   });
-      // } else {
-      //   Toast.fail(data.message || '获取失败');
-      // }
-      yield put({
-        type: 'updateState',
-        payload: {
-          listData: defaultListData,
-        },
+    * queryList ({ payload={}, callback }, { call, put, select }) {
+      const { isRefresh = false } = payload,
+        _this = yield select(_ => _[`${namespace}`]),
+        { paginations: { nowPage, pageSize }, listData } = _this,
+        start = isRefresh ? getDefaultPaginations().nowPage : nowPage;
+      const { success, data: res, msg = '获取数据失败，请稍后再试。' } = yield call(queryCollection, {
+        ...payload,
+        nowPage: start,
+        pageSize,
       });
+      if (success) {
+        const { data = [] } = res;
+        let newLists = [];
+        newLists = start === getDefaultPaginations().nowPage ? data : [...listData, ...data];
+        yield put({
+          type: 'updateState',
+          payload: {
+            hasMore: data.length === getDefaultPaginations().pageSize,
+          },
+        });
+        if (data.length !== 0) {
+          yield put({
+            type: 'updateState',
+            payload: {
+              paginations: {
+                ..._this.paginations,
+                nowPage: start + 1,
+              },
+              listData: newLists,
+            },
+          });
+        }
+        if (callback) callback();
+      } else {
+        Toast.fail(msg || '获取失败');
+      }
     },
   },
 });

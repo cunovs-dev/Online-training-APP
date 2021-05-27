@@ -25,23 +25,25 @@ const PrefixCls = 'dashboard';
 
 const Dashboard = ({ dashboard, app, loading, dispatch }) => {
   const { BaseLine } = Layout,
-    { posterData, listData, hasMore, scrollerTop, selectKey, recommendData, requiredData } = dashboard,
+    { posterData, listData, hasMore, scrollTop, selectKey, recommendData, requiredData } = dashboard,
     { sceneList, vocationalList } = app,
     onRefresh = (callback) => {
       dispatch({
         type: `${PrefixCls}/queryList`,
         payload: {
-          callback,
           isRefresh: true,
+          id: selectKey,
         },
+        callback,
       });
     },
     onEndReached = (callback) => {
       dispatch({
         type: `${PrefixCls}/queryList`,
         payload: {
-          callback,
+          id: selectKey,
         },
+        callback,
       });
     },
     onScrollerTop = (top) => {
@@ -49,23 +51,36 @@ const Dashboard = ({ dashboard, app, loading, dispatch }) => {
         dispatch({
           type: `${PrefixCls}/updateState`,
           payload: {
-            scrollerTop: top,
+            scrollTop: top,
           },
         });
       }
     };
+  const onSort = (sort) => {
+    dispatch({
+      type: 'dashboard/queryList',
+      payload: {
+        id: selectKey,
+        type: 'yw',
+        sort,
+        isRefresh: true,
+      },
+    });
+  };
   const listProps = {
     onRefresh,
     onScrollerTop,
     onEndReached,
     listData,
     hasMore,
-    scrollerTop,
+    scrollTop,
     loading,
     dispatch,
+    onSort,
   };
   const getChildren = (arr) => (
-    arr && arr.map((data, i) => <InfoBox key={i} {...data} handleClick={handleBuildingClick.bind(null, dispatch)} />)
+    arr && arr.map((data, i) => <InfoBox key={i} {...data}
+                                         handleClick={() => handleGoto(dispatch, 'lessondetails', { id: data.videoId })} />)
   );
   const onChange = (tab, key) => {
     dispatch({
@@ -79,9 +94,14 @@ const Dashboard = ({ dashboard, app, loading, dispatch }) => {
       type: 'dashboard/updateState',
       payload: {
         selectKey: key,
+        paginations: {
+          nowPage: 1,
+          pageSize: 10,
+        },
       },
     });
   };
+
   const getContent = (selectKey) => {
     if (selectKey === 0) {
       return (
@@ -89,22 +109,23 @@ const Dashboard = ({ dashboard, app, loading, dispatch }) => {
           <div className={styles.children}>
             <div>
               {posterData.length > 0 &&
-              <Banner hasTitle bannerDatas={posterData} />}
+              <Banner hasTitle bannerDatas={posterData} dispatch={dispatch} handleClick={handleGoto} />}
             </div>
             <WhiteSpace size="md" />
             <CarouselGrid data={sceneList} dispatch={dispatch} handlerClick={handleGridClick} />
             <WhiteSpace size="md" />
             <HotCourse
               bannerDatas={recommendData}
-              handleClick={handleBuildingClick.bind(null, dispatch)}
-              moreClick={() => handleGoto(dispatch, 'videoList', { name: '猜你喜欢' })}
+              handleClick={handleGoto}
+              dispatch={dispatch}
+              moreClick={() => handleGoto(dispatch, 'videoList', { name: '猜你喜欢', fetchType: 'recommend' })}
             />
             <WhiteSpace size="md"
             />
             <Container
               title="必修课程"
               children={getChildren(requiredData)}
-              moreClick={() => handleGoto(dispatch, 'videoList', { name: '必修课程' })}
+              moreClick={() => handleGoto(dispatch, 'videoList', { name: '必修课程', fetchType: 'required' })}
             />
             <WhiteSpace size="md" />
             <BaseLine />
@@ -124,10 +145,11 @@ const Dashboard = ({ dashboard, app, loading, dispatch }) => {
         handlerClick={() => handleGoto(dispatch, 'find')}
       />
       <Tabs
-        tabs={vocationalList}
+        tabs={[{ title: '首页', id: 0 }, ...vocationalList]}
         renderTabBar={props => <Tabs.DefaultTabBar {...props} page={5} />}
         tabBarBackgroundColor="#fff"
         tabBarActiveTextColor="#02b7ee"
+        page={selectKey}
         tabBarTextStyle={{ color: '#8a8b8e' }}
         swipeable={false}
         onChange={onChange}

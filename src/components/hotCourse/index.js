@@ -43,7 +43,7 @@ class HotCourse extends React.Component {
             <div
               className={styles[`${PrefixCls}-image`]}
               key={`a_${i}`}
-              onClick={this.props.handleClick.bind(null, data)}
+              onClick={()=>this.props.handleClick(this.props.dispatch, 'lessondetails', { id: data.videoId })}
             >
               <Tag className={styles.tag} size="xs" text={data.yewu} color="#2CCD5D" />
               <img
@@ -60,7 +60,7 @@ class HotCourse extends React.Component {
                   }
                 }}
               />
-              <div className={styles.text}>{data.title}</div>
+              <div className={styles.text}>{data.videoName}</div>
               <div className={styles.question}>{data.question}</div>
             </div>
           ))}

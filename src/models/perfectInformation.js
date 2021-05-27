@@ -6,29 +6,11 @@ import { model } from 'models/common';
 
 export default modelExtend(model, {
   namespace: 'perfectInformation',
-  state: {
-    list: []
-  },
-
-  subscriptions: {
-    setup ({ dispatch, history }) {
-      history.listen(({ pathname, query, action }) => {
-        if (pathname === '/perfectInformation') {
-
-        }
-      });
-    },
-  },
   effects: {
-    * setInformationApi ({ payload }, { call, put, select }) {
-      const { success, data, msg = '请稍后再试' } = yield call(setInformationApi, payload);
+    * setInformationApi ({ payload, callback }, { call, put }) {
+      const { success, msg = '请稍后再试' } = yield call(setInformationApi, payload);
       if (success) {
-        yield put({
-          type: 'updateState',
-          payload: {
-            list: []
-          }
-        });
+        if (callback) callback();
       } else {
         Toast.fail(msg);
       }

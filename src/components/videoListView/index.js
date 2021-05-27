@@ -14,27 +14,37 @@ import styles from './index.less';
 
 const overlay = [
   {
+    key: 0,
+    value: 0,
+    label: '综合推荐',
+  },
+  {
     key: 1,
-    value: 'visit',
-    label: '时间排序',
+    value: 1,
+    label: '日期',
   },
   {
     key: 2,
-    value: 'uncommitted',
+    value: 2,
     label: '最受欢迎',
+  },
+  {
+    key: 3,
+    value: 3,
+    label: '浏览量',
   },
 ];
 
 const VideoListView = (props) => {
 
-  const { listData, hasMore, scrollerTop, onRefresh, onEndReached, onScrollerTop, loading, dispatch,selectable=true } = props,
+  const { listData, hasMore, scrollerTop, onRefresh, onEndReached, onScrollerTop, loading, dispatch, selectable = true } = props,
 
     getContents = (lists) => (
       <ListView
         layoutHeader={''}
         dataSource={lists}
-        layoutRow={(rowData, sectionID, rowID) => {
-          return commonRow(rowData, sectionID, rowID, null, dispatch);
+        layoutRow={(rowData) => {
+          return commonRow(rowData, handleGoto, dispatch);
         }}
         onEndReached={onEndReached}
         onRefresh={onRefresh}
@@ -48,7 +58,7 @@ const VideoListView = (props) => {
   return (
     <div>
       <div className={styles.outer}>
-        {selectable? <SelectBox title='排序' defaultChoice="最受欢迎" overlay={overlay} />:null}
+        {selectable ? <SelectBox title='排序' onSort={props.onSort} defaultChoice="综合推荐" overlay={overlay} /> : null}
         <WhiteSpace size="xs" />
         {listData.length > 0 ? getContents(listData) : <NoContent isLoading={loading} />}
       </div>

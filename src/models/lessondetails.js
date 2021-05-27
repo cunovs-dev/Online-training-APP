@@ -1,35 +1,98 @@
 import modelExtend from 'dva-model-extend';
+import { queryCourse, collect, praise } from 'services/api';
+import * as Services from 'services/querylist';
 import { model } from 'models/common';
+import { Toast } from 'components';
 
-const defaultInfoDatas = [
-  { text: '[艾德]营养师考试通关课程', image: require('../themes/images/newcourse/c01.jpg') },
-  { text: '执业兽医资格考试真题解析班', image: require('../themes/images/newcourse/c02.jpg') },
-  { text: '设计软件基础班PS/Ai/C4D', image: require('../themes/images/newcourse/c03.jpg') },
-  { text: 'Photoshop后期从初级到高级（精修、调色、合成）大师班', image: require('../themes/images/newcourse/c04.jpg') },
-];
 export default modelExtend(model, {
   namespace: 'lessondetails',
   state: {
-    isPraise: false,
-    isCollect: false,
-    infoData: defaultInfoDatas,
+    infoData: {},
+    recommendData: [],
   },
   subscriptions: {
     setup ({ history, dispatch }) {
       history.listen(({ pathname, action, query }) => {
+        const { id } = query;
         if (pathname === '/lessondetails') {
           dispatch({
             type: 'query',
+            payload: {
+              videoId: id,
+            },
+          });
+          dispatch({
+            type: 'queryRecommend',
           });
         }
       });
     },
   },
   effects: {
-    * query ({ payload }, { call, put, select }) {
-
+    * query ({ payload }, { call, put }) {
+      const { data, success, msg } = yield call(queryCourse, payload);
+      if (success) {
+        yield put({
+          type: 'updateState',
+          payload: {
+            infoData: data,
+          },
+        });
+      } else {
+        Toast.fail(msg);
+      }
+    },
+    * queryRecommend ({ payload }, { put, call }) {
+      const { data: list, success, msg } = yield call(Services.queryRecommend);
+      if (success) {
+        const { data } = list;
+        yield put({
+          type: 'updateState',
+          payload: {
+            recommendData: data,
+          },
+        });
+      } else {
+        Toast.fail(msg);
+      }
+    },
+    * collect ({ payload }, { call, put }) {
+      const { data, success, msg } = yield call(collect, payload);
+      if (success) {
+        yield put({
+          type: 'updateStatus',
+          payload: {
+            isCollect: data.isCollect?'1':'0',
+          },
+        });
+      } else {
+        Toast.fail(msg);
+      }
+    },
+    * praise ({ payload }, { call, put }) {
+      const { data, success, msg } = yield call(praise, payload);
+      if (success) {
+        yield put({
+          type: 'updateStatus',
+          payload: {
+            isPraise: data.isPraise?'1':'0',
+          },
+        });
+      } else {
+        Toast.fail(msg);
+      }
     },
   },
-
-
+  reducers: {
+    updateStatus (state, { payload }) {
+      const { infoData } = state;
+      return {
+        ...state,
+        infoData: {
+          ...infoData,
+          ...payload,
+        },
+      };
+    },
+  },
 });

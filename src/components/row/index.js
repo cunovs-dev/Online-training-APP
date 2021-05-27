@@ -14,14 +14,14 @@ const PrefixCls = 'row',
   Brief = Item.Brief;
 
 module.exports = {
-  commonRow: ({ previewImage, videoName, praise = 0, yewu, people }, onClick) => { //公共视频列表
+  commonRow: ({ previewImage, videoName, praise = 0, yewu, people,videoId, previewCounts }, onClick, dispatch) => { //公共视频列表
     return (
       <div className={styles[`${PrefixCls}-common`]}>
         <Item
           thumb={previewImage}
           multipleLine
           wrap
-          onClick={onClick}
+          onClick={()=>onClick(dispatch,'lessondetails',{id:videoId})}
         >
           <span className={styles[`${PrefixCls}-common-title`]}> {videoName}</span>
           <div>
@@ -30,7 +30,7 @@ module.exports = {
           <div className={styles[`${PrefixCls}-common-info`]}>
             <div className={styles[`${PrefixCls}-common-info-box`]}>
               <Icon type={getLocalIcon('/components/view.svg')} />
-              <span>{praise}</span>
+              <span>{previewCounts}</span>
             </div>
             <div className={styles[`${PrefixCls}-common-info-box`]}>
               <Icon type={getLocalIcon('/components/praise.svg')} />

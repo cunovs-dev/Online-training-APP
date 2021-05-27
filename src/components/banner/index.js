@@ -12,7 +12,7 @@ class Banner extends React.Component {
   };
 
   render () {
-    const { bannerDatas, handleClick } = this.props;
+    const { bannerDatas, dispatch, handleClick } = this.props;
     return (
       <div className={styles[`${PrefixCls}-outer`]} style={{ clear: 'both' }}>
         <Carousel
@@ -37,7 +37,7 @@ class Banner extends React.Component {
             <div
               className={styles[`${PrefixCls}-image`]}
               key={`a_${i}`}
-              onClick={handleClick}
+              onClick={() => handleClick(dispatch, 'lessondetails', { id: data.courseId })}
             >
               <img
                 ref={el => this.banner = el}

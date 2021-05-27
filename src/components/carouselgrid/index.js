@@ -3,7 +3,6 @@ import styles from './index.less';
 
 const PrefixCls = 'carouselgrid';
 const CarouselGrid = (props) => {
-  console.log(props.data)
   return (
     <div className={styles[`${PrefixCls}`]}>
       <Grid
@@ -19,10 +18,10 @@ const CarouselGrid = (props) => {
         onClick={
           (data) => {
             const params = {
-              fetchType:props.data,
+              fetchType: 'cj',
               ...data,
             };
-            props.handlerClick(params,props.dispatch);
+            props.handlerClick(params, props.dispatch);
           }
         }
       />

@@ -1,7 +1,7 @@
 /**
  * @author Lowkey
- * @date 2021/05/06 17:38:19
- * @Description: 通用视频列表
+ * @date 2021/05/27 13:27:47
+ * @Description:
  */
 import React from 'react';
 import { connect } from 'dva';
@@ -14,22 +14,20 @@ const PrefixCls = 'collection';
 
 function Collection ({ location, dispatch, collection, loading }) {
   const { name = '' } = location.query,
-    { listData, hasMore, scrollerTop } = collection,
+    { listData, hasMore, scrollTop } = collection,
     onRefresh = (callback) => {
       dispatch({
         type: `${PrefixCls}/queryList`,
         payload: {
-          callback,
           isRefresh: true,
         },
+        callback,
       });
     },
     onEndReached = (callback) => {
       dispatch({
         type: `${PrefixCls}/queryList`,
-        payload: {
-          callback,
-        },
+        callback,
       });
     },
     onScrollerTop = (top) => {
@@ -37,7 +35,7 @@ function Collection ({ location, dispatch, collection, loading }) {
         dispatch({
           type: `${PrefixCls}/updateState`,
           payload: {
-            scrollerTop: top,
+            scrollTop: top,
           },
         });
       }
@@ -48,7 +46,7 @@ function Collection ({ location, dispatch, collection, loading }) {
     onEndReached,
     listData,
     hasMore,
-    scrollerTop,
+    scrollTop,
     loading,
     dispatch,
     selectable: false,
@@ -62,6 +60,6 @@ function Collection ({ location, dispatch, collection, loading }) {
 }
 
 export default connect(({ loading, collection }) => ({
-  loading: loading.effects['collection/fetch'],
+  loading: loading.effects['collection/queryList'],
   collection,
 }))(Collection);

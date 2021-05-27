@@ -168,7 +168,7 @@ class Comp extends React.Component {
       return this.props.layoutFooter(this.state.isLoading);
     }
     return (<div style={{ textAlign: 'center' }}>
-      {this.props.hasMore ? <RefreshLoading svg={'/others/refreshloading.svg'} /> : <BaseLine />}
+      {this.props.hasMore ? <RefreshLoading svg={'/components/refreshloading.svg'} /> : <BaseLine />}
     </div>);
   }
 

@@ -24,6 +24,10 @@ class FilterModal extends React.Component {
     };
   }
 
+  componentDidMount () {
+    this.props.onRef(this);
+  }
+
   handlerFilterClick = () => {
     this.setState({
       visible: true,
@@ -41,6 +45,7 @@ class FilterModal extends React.Component {
       visible: false,
     });
   };
+
 
   render () {
     return (
@@ -62,10 +67,16 @@ class FilterModal extends React.Component {
           <div className={styles.content}>
             {this.props.form}
           </div>
-          <div className={styles.modalFoot}>
-            <Button inline size="small" style={{ marginRight: '20px' }} onClick={this.handlerCancelClick}>取消</Button>
-            <Button type="primary" inline size="small" onClick={this.handlerOkClick}>确定</Button>
-          </div>
+          {
+            this.props.hasFooter ?
+              <div className={styles.modalFoot}>
+                <Button inline size="small" style={{ marginRight: '20px' }}
+                        onClick={this.handlerCancelClick}>取消</Button>
+                <Button type="primary" inline size="small" onClick={this.handlerOkClick}>确定</Button>
+              </div>
+              :
+              null
+          }
         </Modal>
       </div>
     );
@@ -75,6 +86,7 @@ class FilterModal extends React.Component {
 FilterModal.propTypes = {};
 FilterModal.defaultProps = {
   content: '',
+  hasFooter: true,
   sup: renderDefaultSup(),
   handlerClick: null,
 };

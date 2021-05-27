@@ -1,26 +1,41 @@
 import React from 'react';
 import { connect } from 'dva';
 import Nav from 'components/nav';
-import { defaultBusiness } from 'utils/defaults';
-
+import { questionnairePath } from 'utils/defaults';
+import { routerRedux } from 'dva/router';
 import FilterForm from 'components/filterForm';
 import { List } from 'components';
 import styles from './index.less';
 
+const Comp = ({ location, app, dispatch }) => {
+  const { title = '完善个人信息' } = location.query;
+  const { vocationalList, sceneList, weaknessList, selfChoice = {} } = app;
 
-const Comp = ({ location, app, dispatch, perfectInformation }) => {
-  const { vocationalList, sceneList } = app;
-  const submit = (data) => {
+  const goBack = () => {
+    dispatch(routerRedux.goBack());
+  };
+
+  const submit = (data, type) => {
     dispatch({
       type: 'perfectInformation/setInformationApi',
       payload: data,
+      callback: type === 'edit' ? goBack : () => cnOpen(questionnairePath),
     });
   };
+
+  const props = {
+    selfChoice,
+    vocationalList,
+    sceneList,
+    weaknessList,
+    onOk: submit,
+  };
+
   return (
     <div>
-      <Nav title="完善个人信息" dispatch={dispatch} />
+      <Nav title={title} dispatch={dispatch} />
       <div className={styles.content}>
-        <FilterForm perfect vocationalList={vocationalList} sceneList={sceneList} onOk={submit} />
+        <FilterForm perfect {...props} />
       </div>
     </div>
   );

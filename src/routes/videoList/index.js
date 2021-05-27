@@ -13,23 +13,27 @@ import { handleGoto } from 'utils/commonevents';
 const PrefixCls = 'videoList';
 
 function VideoList ({ location, dispatch, videoList, loading }) {
-  const { name = '' } = location.query,
+  const { name = '', fetchType, id } = location.query,
     { listData, hasMore, scrollerTop } = videoList,
     onRefresh = (callback) => {
       dispatch({
-        type: `${PrefixCls}/queryList`,
+        type: `${PrefixCls}/fetch`,
         payload: {
-          callback,
           isRefresh: true,
+          fetchType,
+          id,
         },
+        callback,
       });
     },
     onEndReached = (callback) => {
       dispatch({
-        type: `${PrefixCls}/queryList`,
+        type: `${PrefixCls}/fetch`,
         payload: {
-          callback,
+          fetchType,
+          id,
         },
+        callback,
       });
     },
     onScrollerTop = (top) => {
@@ -41,7 +45,18 @@ function VideoList ({ location, dispatch, videoList, loading }) {
           },
         });
       }
-    }
+    },
+    onSort = (sort) => {
+      dispatch({
+        type: `${PrefixCls}/fetch`,
+        payload: {
+          id,
+          fetchType,
+          sort,
+          isRefresh: true,
+        },
+      });
+    };
   const listProps = {
     onRefresh,
     onScrollerTop,
@@ -51,6 +66,7 @@ function VideoList ({ location, dispatch, videoList, loading }) {
     scrollerTop,
     loading,
     dispatch,
+    onSort,
   };
   return (
     <div>
