@@ -15,7 +15,7 @@ export default modelExtend(model, {
   subscriptions: {
     setup ({ dispatch, history }) {
       history.listen(location => {
-        let { pathname} = location;
+        let { pathname } = location;
         if (pathname.startsWith('/personal')) {
           dispatch({
             type: 'query',
@@ -36,7 +36,7 @@ export default modelExtend(model, {
           payload: {
             vocationalList: filterArr(yw, vocationalList),
             sceneList: filterArr(cj, sceneList),
-            weaknessList: [weaknessList.find(item => item.id === fl)],
+            weaknessList: weaknessList.find(item => item.id === fl) ? [weaknessList.find(item => item.id === fl)] : [],
           },
         });
       } else {

@@ -6,13 +6,13 @@
 import React from 'react';
 import { connect } from 'dva';
 import TitleBox from 'components/titlecontainer';
-import { Tabs, WhiteSpace, Badge, Icon, Toast } from 'components';
+import { Tabs, WhiteSpace, Badge, Icon, Toast, Button, Modal } from 'components';
 import Tag from 'components/tag';
 import Praise from 'components/praise';
 import ReactDOM from 'react-dom';
 import { myNoteRow } from 'components/row';
 import { handleGoto } from 'utils/commonevents';
-import { getOffsetTopByBody, getLocalIcon } from 'utils';
+import { getOffsetTopByBody, getLocalIcon, getVideoTips } from 'utils';
 import Photo from 'components/photo';
 import Collection from 'components/collection';
 import ApplicationBox from 'components/applicationBox';
@@ -68,9 +68,11 @@ class LessonDetails extends React.Component {
       tabOffset: getOffsetTopByBody(tabs),
     });
 
-    video.onplay = () => {
-      Toast.info(checkConnection());
-    };
+    if (video.onplay) {
+      video.onplay = () => {
+        Toast.info(checkConnection());
+      };
+    }
   }
 
   collectClick = () => {
@@ -103,15 +105,49 @@ class LessonDetails extends React.Component {
                                          handleClick={() => handleGoto(this.props.dispatch, 'lessondetails', { id: data.videoId })} />)
   );
 
+  payCourse = () => {
+    const { location: { query } } = this.props;
+    const { id } = query;
+    this.props.dispatch({
+      type: 'lessondetails/payCourse',
+      payload: {
+        videoId: id,
+      },
+    });
+  };
+
+  showAlert = () => {
+    const { infoData } = this.props.lessondetails;
+    const { integral } = infoData;
+    Modal.alert('兑换课程', `兑换将消耗${integral}积分`, [
+      {
+        text: '再想想',
+        onPress: () => console.log('cancel'),
+      },
+      { text: '立即兑换', onPress: this.payCourse },
+
+    ]);
+  };
+
   render () {
     const { infoData, recommendData } = this.props.lessondetails;
-    const { videoName, scene, yewu, praise, previewImage, videoSrc, question, isCollect, isPraise } = infoData;
+    const { videoName, scene, yewu, hasAuth, integral, praise, previewImage, videoSrc, question, isCollect, isPraise } = infoData;
     const praiseProps = {
       isPraise: Boolean(Number(isPraise)),
       num: praise,
       handlePraiseClick: this.praiseClick,
     };
     const getvideo = (pic, src) => {
+      if (!!!Number(hasAuth)) {
+        return (
+          <div className={styles.pay}>
+            <div className={styles.bg} ref={el => this.video = el}
+                 style={{ backgroundImage: `url(${previewImage})` }} />
+            <Button className={styles.btn} type="primary" size="small"
+                    onClick={this.showAlert}>{`消耗${integral}积分观看`}</Button>
+          </div>
+        );
+      }
       return (
         <video
           ref={el => this.video = el}
@@ -150,7 +186,7 @@ class LessonDetails extends React.Component {
             <WhiteSpace size='md' />
             <TitleBox title="基本信息" sup={renderSup()} />
             <div className={styles.baseInfo}>
-              <Tag className={styles.tag} size="xs" text={scene} color="green" />
+              <Tag className={styles.tag} size="xs" text={getVideoTips(yewu)} color="green" />
               <div className={styles.title}>{videoName}</div>
               <div className={styles.question}>{question}</div>
             </div>

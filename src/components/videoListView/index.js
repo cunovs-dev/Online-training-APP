@@ -37,14 +37,14 @@ const overlay = [
 
 const VideoListView = (props) => {
 
-  const { listData, hasMore, scrollerTop, onRefresh, onEndReached, onScrollerTop, loading, dispatch, selectable = true } = props,
+  const { listData, hasMore, scrollerTop, onRefresh, onEndReached, onScrollerTop, loading, dispatch, selectable = true, fetchType } = props,
 
     getContents = (lists) => (
       <ListView
         layoutHeader={''}
         dataSource={lists}
         layoutRow={(rowData) => {
-          return commonRow(rowData, handleGoto, dispatch);
+          return commonRow(rowData, handleGoto, dispatch, fetchType);
         }}
         onEndReached={onEndReached}
         onRefresh={onRefresh}

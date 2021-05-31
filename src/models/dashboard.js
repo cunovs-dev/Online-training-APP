@@ -5,6 +5,7 @@ import { validInformation } from 'services/login';
 import { routerRedux } from 'dva/router';
 import { defaultSceneIcon } from 'utils/defaults';
 import { Toast } from 'components';
+import { setSession } from 'utils';
 import { model } from 'models/common';
 
 const getDefaultPaginations = () => ({
@@ -46,11 +47,6 @@ export default modelExtend(model, {
             dispatch({
               type: 'updateState',
               payload: {
-                posterData: [],
-                recommendData: [],
-                newCourse: [],
-                listData: [],
-                requiredData: [],
                 selectKey: 0,
                 scrollerTop: 0,
               },
@@ -78,7 +74,7 @@ export default modelExtend(model, {
               vocationalList: yw.data,
               sceneList: cj.data,
               weaknessList: fl.data,
-              selfChoice:self
+              selfChoice: self,
             },
           });
         } else {
@@ -88,8 +84,12 @@ export default modelExtend(model, {
               vocationalList: yw.data,
               sceneList: getGird(cj.data),
               weaknessList: fl.data,
-              selfChoice:self
+              selfChoice: self,
             },
+          });
+          setSession({
+            vocationalList:JSON.stringify(yw.data),
+            sceneList:JSON.stringify(cj.data)
           });
           yield put({
             type: 'query',

@@ -1,7 +1,7 @@
 import { request, config } from 'utils';
 
 const { api } = config;
-const { SetInformationApi, GetCourseApi, CollectionApi, PraiseApi } = api;
+const { SetInformationApi, GetCourseApi, CollectionApi, PraiseApi, PayApi, GetUserInfo } = api;
 
 export async function setInformationApi (data) {
   return request({
@@ -38,5 +38,19 @@ export async function praise (data) {
     url: PraiseApi,
     method: 'post',
     data,
+  });
+}
+
+export async function payCourse (data) {
+  return request({
+    url: PayApi,
+    method: 'post',
+    data,
+  });
+}
+export async function queryUserInfo (payload) {
+  return request({
+    url: GetUserInfo,
+    data: payload,
   });
 }

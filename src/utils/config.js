@@ -1,18 +1,18 @@
 module.exports = {
   name: 'ChinaMobil',
   userTag: {
-    userName: 'userRealName',
+    userName: 'userName',
     userToken: 'userPwd',
     userId: 'userId',
     photoPath: 'photoPath',
     userPhone: 'userPhone',
   },
   questionnaireURL: 'http://192.168.0.224:8001',
-  // baseURL: 'http://192.168.0.204:8083',
-  baseURL: 'http://moodle.cunovs.com:8080',
+  baseURL: 'http://192.168.0.204:8083',
+  // baseURL: 'http://moodle.cunovs.com:8080',
   api: {
     LoginApi: '/login/account',
-    LogoutApi: '/login/outLogin',
+    LogoutApi: '/login/logout',
     PhoneCodeApi: '/login/code',
     ValidInformationApi: '/config/valid',
     SetInformationApi: '/user/direction',
@@ -25,7 +25,9 @@ module.exports = {
     GetCourseApi: '/course',
     CollectionApi: '/collect',
     PraiseApi: '/praise',
-    GetHistoryApi: '/hs',
+    GetHistoryApi: '/user/video',
     GetDirectionApi: '/user/direction',
+    PayApi: '/business',
+    GetUserInfo: '/user/self',
   },
 };

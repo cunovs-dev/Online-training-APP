@@ -4,7 +4,7 @@ import { Carousel } from 'antd-mobile';
 import Tag from 'components/tag';
 import styles from './index.less';
 import { Icon } from 'components';
-import { getLocalIcon } from 'utils';
+import { getLocalIcon, getVideoTips } from 'utils';
 
 const PrefixCls = 'hotCourse';
 
@@ -21,7 +21,7 @@ class HotCourse extends React.Component {
 
   render () {
     const { slideIndex } = this.state,
-      bannerDatas = this.props.bannerDatas;
+      { bannerDatas } = this.props;
     return (
       <div className={styles[`${PrefixCls}-outer`]} style={{ clear: 'both' }}>
         <div className={styles[`${PrefixCls}-outer-title`]}>
@@ -43,9 +43,9 @@ class HotCourse extends React.Component {
             <div
               className={styles[`${PrefixCls}-image`]}
               key={`a_${i}`}
-              onClick={()=>this.props.handleClick(this.props.dispatch, 'lessondetails', { id: data.videoId })}
+              onClick={() => this.props.handleClick(this.props.dispatch, 'lessondetails', { id: data.videoId })}
             >
-              <Tag className={styles.tag} size="xs" text={data.yewu} color="#2CCD5D" />
+              <Tag className={styles.tag} size="xs" text={getVideoTips(data.yewu)} color="#2CCD5D" />
               <img
                 ref={el => this.banner = el}
                 src={data.previewImage}

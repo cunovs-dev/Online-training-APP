@@ -9,9 +9,11 @@ import { routerRedux } from 'dva/router';
 import bg from '../../themes/images/others/mineBg.png';
 import styles from './index.less';
 
+const PrefixCls = 'consumption';
 const Consumption = ({ dispatch, location, consumption, loading }) => {
   const { query: { name } } = location,
     { listData, hasMore, scrollerTop } = consumption,
+    num = listData.length > 0 ? listData[0].latestIntegral : 0,
     onRefresh = (callback) => {
       dispatch({
         type: `${PrefixCls}/queryList`,
@@ -66,10 +68,10 @@ const Consumption = ({ dispatch, location, consumption, loading }) => {
         </div>
         <div className={styles.content}>
           <div className={styles.text}>剩余积分</div>
-          <div className={styles.integral}>92</div>
+          <div className={styles.integral}>{num}</div>
         </div>
       </div>
-      <WhiteSpace/>
+      <WhiteSpace />
       {listData.length > 0 ? getContents(listData) : <NoContent isLoading={loading} />}
     </div>
   );

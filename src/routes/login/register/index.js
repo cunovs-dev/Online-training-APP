@@ -27,7 +27,7 @@ class register extends React.Component {
     };
     const { location: { query } } = props, { type = 'register' } = query;
     this.timer = null;
-    this.title = type === 'reset' ? '重置密码' : '注册';
+    this.title = type === 'reset' ? '重置密码' : '登录';
     this.subTitle = type === 'reset' ? '手机号+验证码重置密码' : '免费注册会员';
     this.placeholder = type === 'reset' ? '新密码' : '密码';
   }
@@ -101,6 +101,12 @@ class register extends React.Component {
     });
   };
 
+  componentWillUnmount () {
+    clearInterval(this.timer)
+  }
+
+
+
   render () {
     const { form: { getFieldProps, getFieldError }, login: { buttonState }, location: { query } } = this.props,
       { type = 'register' } = query,
@@ -108,8 +114,8 @@ class register extends React.Component {
       codeKey = 'code';
     return (
       <div>
-        <div className={styles.back} onClick={() => this.props.dispatch(routerRedux.goBack())}><Icon type="left" />快速登录
-        </div>
+        {/*<div className={styles.back} onClick={() => this.props.dispatch(routerRedux.goBack())}><Icon type="left" />快速登录*/}
+        {/*</div>*/}
         <Tips title={this.title} subTitle={this.subTitle} />
         <div className={styles[`${PrefixCls}-form`]}>
           <form>
@@ -179,7 +185,7 @@ class register extends React.Component {
                   type === 'reset' ?
                     !buttonState ? '重置中...' : '重置密码'
                     :
-                    !buttonState ? '注册中...' : '注册会员'
+                    !buttonState ? '正在登录...' : '登录'
                 }
               </Button>
             </WingBlank>

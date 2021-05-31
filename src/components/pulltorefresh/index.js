@@ -10,7 +10,8 @@ import PropTypes from 'prop-types';
 import { getOffsetTopByBody } from 'utils';
 
 let timer,
-  timer2;
+  timer2,
+  timer3;
 
 class Refresh extends React.Component {
   constructor (props) {
@@ -43,28 +44,13 @@ class Refresh extends React.Component {
     }
   }
 
-  componentWillReceiveProps (nextProps) {
-    let el = ReactDOM.findDOMNode(this.ptr);
-    if (this.ptr && el) {
-      const hei = cnhtmlHeight - getOffsetTopByBody(el);
-      if (this._isMounted) {
-        timer = setTimeout(() => this.setState(() => ({
-          height: hei,
-        })), 300);
-        timer2 = setTimeout(() => {
-          if (this.props.scrollerTop > 0 && this.props.scrollerTop !== nextProps.scrollerTop) {
-            el.scrollTop = this.props.scrollerTop;
-          }
-        }, 300);
-      }
-    }
-  }
+
 
   defaultOnRefresh = () => {
-    this.setState({ refreshing: true });
-    setTimeout(() => {
-      this.setState({ refreshing: false });
-    }, 1000);
+      this.setState({ refreshing: true });
+      timer3 = setTimeout(() => {
+        this.setState({ refreshing: false });
+      }, 1000);
   };
 
   componentWillUnmount () {
@@ -77,6 +63,7 @@ class Refresh extends React.Component {
     }
     clearTimeout(timer);
     clearTimeout(timer2);
+    clearTimeout(timer3);
   }
 
   render () {

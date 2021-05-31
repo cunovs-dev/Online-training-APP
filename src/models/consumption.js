@@ -1,35 +1,39 @@
 import { parse } from 'qs';
 import modelExtend from 'dva-model-extend';
 import { model } from 'models/common';
+import { queryPayList } from 'services/querylist';
 
-const defaultData = [
-  {
-    title: '如何促进消费？',
-    integral: 10,
-    date: new Date().getTime(),
-  },
-  {
-    title: '如何促进消费？',
-    integral: 10,
-    date: new Date().getTime(),
-  },
-];
-
+const getDefaultPaginations = () => ({
+  nowPage: 1,
+  pageSize: 10,
+});
+const namespace = 'consumption';
 export default modelExtend(model, {
-  namespace: 'consumption',
+  namespace,
   state: {
     listData: [],
     refreshing: false,
     scrollTop: 0,
+    paginations: getDefaultPaginations(),
+    hasMore: true,
   },
   subscriptions: {
     setup ({ dispatch, history }) {
       history.listen(location => {
-        let { pathname, query, action } = location;
+        let { pathname, action } = location;
         if (pathname.startsWith('/consumption')) {
-          if (action == 'PUSH') {
+          if (action === 'PUSH') {
             dispatch({
-              type: 'query',
+              type: 'updateState',
+              payload: {
+                listData: [],
+                refreshing: false,
+                scrollTop: 0,
+                paginations: getDefaultPaginations(),
+              },
+            });
+            dispatch({
+              type: 'queryList'
             });
           }
         }
@@ -37,13 +41,42 @@ export default modelExtend(model, {
     },
   },
   effects: {
-    * query ({ payload }, { call, put, select }) {
-      yield put({
-        type: 'updateState',
-        payload: {
-          listData: defaultData,
-        },
+    * queryList ({ payload={}, callback }, { call, put, select }) {
+      const { isRefresh = false } = payload,
+        _this = yield select(_ => _[`${namespace}`]),
+        { paginations: { nowPage, pageSize }, listData } = _this,
+        start = isRefresh ? getDefaultPaginations().nowPage : nowPage;
+      const { success, data: res, msg = '获取数据失败，请稍后再试。' } = yield call(queryPayList, {
+        ...payload,
+        nowPage: start,
+        pageSize,
       });
+      if (success) {
+        const { data = [] } = res;
+        let newLists = [];
+        newLists = start === getDefaultPaginations().nowPage ? data : [...listData, ...data];
+        yield put({
+          type: 'updateState',
+          payload: {
+            hasMore: data.length === getDefaultPaginations().pageSize,
+          },
+        });
+        if (data.length !== 0) {
+          yield put({
+            type: 'updateState',
+            payload: {
+              paginations: {
+                ..._this.paginations,
+                nowPage: start + 1,
+              },
+              listData: newLists,
+            },
+          });
+        }
+        if (callback) callback();
+      } else {
+        Toast.fail(msg || '获取失败');
+      }
     },
   },
 

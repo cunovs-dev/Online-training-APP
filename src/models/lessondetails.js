@@ -1,5 +1,5 @@
 import modelExtend from 'dva-model-extend';
-import { queryCourse, collect, praise } from 'services/api';
+import { queryCourse, collect, praise, payCourse } from 'services/api';
 import * as Services from 'services/querylist';
 import { model } from 'models/common';
 import { Toast } from 'components';
@@ -62,9 +62,10 @@ export default modelExtend(model, {
         yield put({
           type: 'updateStatus',
           payload: {
-            isCollect: data.isCollect?'1':'0',
+            isCollect: data.isCollect ? '1' : '0',
           },
         });
+        Toast.success(data.isCollect ? '已收藏' : '已取消');
       } else {
         Toast.fail(msg);
       }
@@ -75,7 +76,21 @@ export default modelExtend(model, {
         yield put({
           type: 'updateStatus',
           payload: {
-            isPraise: data.isPraise?'1':'0',
+            isPraise: data.isPraise ? '1' : '0',
+          },
+        });
+        Toast.success(data.isPraise ? '已赞' : '已取消');
+      } else {
+        Toast.fail(msg);
+      }
+    },
+    * payCourse ({ payload }, { call, put }) {
+      const { success, msg } = yield call(payCourse, payload);
+      if (success) {
+        yield put({
+          type: 'updateStatus',
+          payload: {
+            hasAuth: '1',
           },
         });
       } else {

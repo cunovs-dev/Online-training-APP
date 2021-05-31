@@ -23,7 +23,7 @@ import SearchHeader from 'components/searchheader';
 
 const PrefixCls = 'dashboard';
 
-const Dashboard = ({ dashboard, app, loading, dispatch }) => {
+const Dashboard = ({ dashboard, app, loadList, dispatch }) => {
   const { BaseLine } = Layout,
     { posterData, listData, hasMore, scrollTop, selectKey, recommendData, requiredData } = dashboard,
     { sceneList, vocationalList } = app,
@@ -58,6 +58,12 @@ const Dashboard = ({ dashboard, app, loading, dispatch }) => {
     };
   const onSort = (sort) => {
     dispatch({
+      type: 'dashboard/updateState',
+      payload: {
+        listData: [],
+      },
+    });
+    dispatch({
       type: 'dashboard/queryList',
       payload: {
         id: selectKey,
@@ -74,30 +80,33 @@ const Dashboard = ({ dashboard, app, loading, dispatch }) => {
     listData,
     hasMore,
     scrollTop,
-    loading,
+    loading: loadList,
     dispatch,
     onSort,
+
   };
   const getChildren = (arr) => (
-    arr && arr.map((data, i) => <InfoBox key={i} {...data}
-                                         handleClick={() => handleGoto(dispatch, 'lessondetails', { id: data.videoId })} />)
+    arr && arr.map((data, i) =>
+      <InfoBox
+        key={i}
+        {...data}
+        handleClick={() => handleGoto(dispatch, 'lessondetails', { id: data.videoId })}
+      />)
   );
   const onChange = (tab, key) => {
+    dispatch({
+      type: 'dashboard/updateState',
+      payload: {
+        selectKey: key,
+        listData: [],
+      },
+    });
     dispatch({
       type: 'dashboard/queryList',
       payload: {
         id: key,
         type: 'yw',
-      },
-    });
-    dispatch({
-      type: 'dashboard/updateState',
-      payload: {
-        selectKey: key,
-        paginations: {
-          nowPage: 1,
-          pageSize: 10,
-        },
+        isRefresh: true,
       },
     });
   };
@@ -160,9 +169,9 @@ const Dashboard = ({ dashboard, app, loading, dispatch }) => {
   );
 };
 
-Dashboard.propTypes = {
-  dashboard: PropTypes.object,
-  loading: PropTypes.object,
-};
 
-export default connect(({ dashboard, app, loading }) => ({ dashboard, app, loading }))(Dashboard);
+export default connect(({ dashboard, app, loading }) => ({
+  dashboard,
+  app,
+  loadList: loading.effects['dashboard/queryList'],
+}))(Dashboard);

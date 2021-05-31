@@ -4,28 +4,48 @@ import qs from 'qs';
 import lodash from 'lodash';
 import pathToRegexp from 'path-to-regexp';
 import { Toast } from 'antd-mobile';
-import { _cg } from './cookie';
+import { _cg, _cr } from './cookie';
 import { baseURL, userTag } from './config';
 
-const { userToken } = userTag;
-const token = _cg(userToken) ? _cg(userToken)
-  .split(',') : 'cnv-token,token'.split(',');
+const { userName, userId, userToken, photoPath } = userTag;
+const loginOut401 = () => {
+  _cr(userName);
+  _cr(userToken);
+  _cr(userId);
+  _cr(photoPath);
+  _cr('vocationalList');
+  _cr('sceneList');
+};
+
 axios.defaults.baseURL = baseURL;
-axios.defaults.headers.common[`${token[0]}`] = `${token[1]}`;
 axios.defaults.withCredentials = true;
 
 const doDecode = (json) => {
   return eval(`(${json})`);
 };
 const fetch = (options) => {
+  const token = _cg(userToken)
+    .split(',');
+  axios.interceptors.request.use(
+    config => {
+      if (token.length === 2) {
+        config.headers[token[0]] = token[1];
+      }
+
+      return config;
+    },
+    err => Promise.reject(err),
+  );
   let {
     method = 'get',
     data,
     url,
   } = options;
 
+  const appendParams = {};
+  // appendParams[usertoken] = _cg(usertoken)
 
-  const cloneData = lodash.cloneDeep({ ...data });
+  const cloneData = lodash.cloneDeep({ ...data, ...appendParams });
 
   try {
     let domin = '';
@@ -47,12 +67,7 @@ const fetch = (options) => {
 
   switch (method.toLowerCase()) {
     case 'get':
-      return axios.get(url, { params: cloneData },
-        {
-          headers: {
-            'x-requested-with': 'XMLHttpRequest',
-          },
-        });
+      return axios.get(url, { params: cloneData });
     case 'delete':
       return axios.delete(url, {
         data: cloneData,
@@ -131,6 +146,7 @@ export default function request (options) {
         const { data, statusText } = response;
         statusCode = response.status;
         if (statusCode === 401) {
+          loginOut401();
           hashHistory.replace('/login');
         }
         msg = getResponeseErrMsg(statusCode) || statusText;

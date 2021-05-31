@@ -6,7 +6,7 @@
 import React from 'react';
 import Tag from 'components/tag';
 import { List, Icon } from 'antd-mobile';
-import { getErrorImg, getCommonDate, getImages, getLocalIcon } from 'utils';
+import { getErrorImg, getVideoTips, getCommonDate, getImages, getLocalIcon } from 'utils';
 import styles from './index.less';
 
 const PrefixCls = 'row',
@@ -14,18 +14,18 @@ const PrefixCls = 'row',
   Brief = Item.Brief;
 
 module.exports = {
-  commonRow: ({ previewImage, videoName, praise = 0, yewu, people,videoId, previewCounts }, onClick, dispatch) => { //公共视频列表
+  commonRow: ({ previewImage, videoName, praise = 0, yewu, scene, people, videoId, previewCounts }, onClick, dispatch, fetchType) => { //公共视频列表
     return (
       <div className={styles[`${PrefixCls}-common`]}>
         <Item
           thumb={previewImage}
           multipleLine
           wrap
-          onClick={()=>onClick(dispatch,'lessondetails',{id:videoId})}
+          onClick={() => onClick(dispatch, 'lessondetails', { id: videoId })}
         >
           <span className={styles[`${PrefixCls}-common-title`]}> {videoName}</span>
           <div>
-            <Tag size="xs" text={yewu} color="cyan" />
+            <Tag size="xs" text={getVideoTips(fetchType === 'cj' ? scene : yewu, fetchType)} color="cyan" />
           </div>
           <div className={styles[`${PrefixCls}-common-info`]}>
             <div className={styles[`${PrefixCls}-common-info-box`]}>
@@ -41,11 +41,11 @@ module.exports = {
       </div>
     );
   },
-  consumptionRow: ({ title, integral = 0, date }) => { //公共视频列表
+  consumptionRow: ({ title, integral = 0,types, createTime }) => { //公共视频列表
     return (
       <div className={styles.consumption}>
-        <Item multipleLine extra={<span className={styles.num}>{`-${integral}`}</span>}>
-          {title} <Brief>{getCommonDate(date, false)}</Brief>
+        <Item multipleLine extra={<span className={styles.num}>{`${types==='1'?'-':'+'}${integral}`}</span>}>
+          {types==='1'?'购买课程':'充值积分'} <Brief>{createTime}</Brief>
         </Item>
       </div>
     );

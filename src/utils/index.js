@@ -8,7 +8,7 @@ import formsubmit from './formsubmit';
 
 
 const { userTag: { userName, userToken, userId, photoPath }, baseURL } = config,
-  { _cs, _cr } = cookie;
+  { _cs, _cr, _cg } = cookie;
 // 连字符转驼峰
 String.prototype.hyphenToHump = function () {
   return this.replace(/-(\w)/g, (...args) => {
@@ -56,8 +56,7 @@ const getImages = (path = '', type = 'defaultImg') => {
     : (config.baseURL + (path.startsWith('/') ? '' : '/') + path);
 };
 
-const getErrorImg = (el,type='defaultImg') => {
-  console.log(el)
+const getErrorImg = (el, type = 'defaultImg') => {
   if (el && el.target) {
     el.target.src = type === 'defaultImg' ? defaultImg : defaultUserIcon;
     el.target.onerror = null;
@@ -69,6 +68,8 @@ const setLoginOut = () => {
   _cr(userToken);
   _cr(userId);
   _cr(photoPath);
+  _cr('vocationalList');
+  _cr('sceneList');
 };
 
 const setSession = (obj) => {
@@ -146,8 +147,28 @@ const getCommonDate = (date, details = true, showWeek = true) => {
     return `${year}年${preDate.getMonth() + 1}月${preDate.getDate()}日`;
   }
 };
-const getVideoTips = (arr = [], id) => {
-  return arr.find(item => item.id === id).title || '';
+/**
+ *
+ * @param id
+ * @param priority 优先级 默认业务
+ * @returns {*}
+ */
+const getVideoTips = (id, priority = 'yw') => {
+  const vocationalList = _cg('vocationalList') && JSON.parse(_cg('vocationalList'));
+  const sceneList = _cg('vocationalList') && JSON.parse(_cg('sceneList'));
+  let ywRes = '',
+    cjRes = '';
+  if (Array.isArray(vocationalList) && vocationalList.find(item => item.id === id)) {
+    ywRes = vocationalList.find(item => item.id === id).title || '';
+  }
+  if (Array.isArray(sceneList) && sceneList.find(item => item.id === id)) {
+    cjRes = sceneList.find(item => item.id === id).title || '';
+  }
+  if (priority === 'yw') {
+    return ywRes !== '' ? ywRes : cjRes;
+  } else {
+    return cjRes !== '' ? cjRes : ywRes;
+  }
 };
 
 const filterArr = (arr1 = [], arr2 = []) => {

@@ -18,7 +18,8 @@ import styles from './index.less';
 const PrefixCls = 'mine';
 
 function Mine ({ location, dispatch, mine, app }) {
-  const { users: { userName, photoPath } } = app;
+  const { users: { photoPath } } = app;
+  const { info: { userRealName, userIntegral, userVideo } } = mine;
   const handleSetupClick = ({ name = '个人设置' }) => {
     dispatch(routerRedux.push({
       pathname: '/setup',
@@ -36,22 +37,22 @@ function Mine ({ location, dispatch, mine, app }) {
       </div>
       <div className={styles[`${PrefixCls}-infoBox`]}>
         <div className={styles.info}>
-          <img src={getImages(photoPath, 'user')} alt="" onError={(el)=>getErrorImg(el,'user')} />
+          <img src={getImages(photoPath, 'user')} alt="" onError={(el) => getErrorImg(el, 'user')} />
           <div className={styles.right}>
             <div className={styles.name}>
-              <span>{userName}</span>
+              <span>{userRealName}</span>
             </div>
             <div className={styles.level}>成长记录</div>
           </div>
         </div>
         <div className={styles.bottom}>
           <div className={styles.item}>
-            <p className={styles.num}>92</p>
+            <p className={styles.num}>{userIntegral}</p>
             <p className={styles.text}>会员积分</p>
           </div>
           <div className={styles.item}
                onClick={() => handleGoto(dispatch, 'videoList', { name: '已学课程', fetchType: 'history' })}>
-            <p className={styles.num}>2</p>
+            <p className={styles.num}>{userVideo}</p>
             <p className={styles.text}>已学课程</p>
           </div>
         </div>

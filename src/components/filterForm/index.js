@@ -12,6 +12,7 @@ class FilterForm extends React.Component {
   constructor (props) {
     super(props);
     const { selfChoice = {} } = props;
+    console.log(selfChoice)
     const { yw = [], cj = [] } = selfChoice;
     this.state = {
       height: document.documentElement.clientHeight - 45,

@@ -42,7 +42,7 @@ const Comp = ({ location, app, dispatch }) => {
 };
 
 export default connect(({ loading, app, perfectInformation }) => ({
-  loading,
+  adding: loading.effects['perfectInformation/setInformationApi'],
   app,
   perfectInformation,
 }))(Comp);

@@ -33,8 +33,8 @@ export default modelExtend(pageModel, {
       });
       const { phone, code = '' } = payload;
       const { data, success, msg } = yield call(login, { username: phone, code }, true);
-      const { userPwd, userId, userRealName:userName, userPhone, photoPath } = data;
       if (success) {
+        const { userPwd, userId, userRealName: userName, userPhone, photoPath } = data;
         setSession({
           userPwd,
           userId,
@@ -63,9 +63,11 @@ export default modelExtend(pageModel, {
     },
     * sendLoginCode ({ payload }, { call, put }) {
       const { phone } = payload;
-      const data = yield call(sendLoginCode, { uname: phone });
-      if (data) {
-        console.log(data);
+      const { success, msg, data } = yield call(sendLoginCode, { uname: phone });
+      if (success) {
+        Toast.offline(data.message);
+      } else {
+        Toast.fail(msg);
       }
     },
   },

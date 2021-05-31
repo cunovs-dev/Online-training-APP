@@ -67,6 +67,7 @@ function VideoList ({ location, dispatch, videoList, loading }) {
     loading,
     dispatch,
     onSort,
+    fetchType,
   };
   return (
     <div>

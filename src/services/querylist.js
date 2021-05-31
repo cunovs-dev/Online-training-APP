@@ -1,7 +1,7 @@
 import { request, config } from 'utils';
 
 const { api } = config;
-const { RetrievalApi, SearchApi, GetRecommendApi, GetRequiredCoursesApi, GetPosterApi, GetHistoryApi, CollectionApi } = api;
+const { RetrievalApi, SearchApi, GetRecommendApi, GetRequiredCoursesApi, GetPosterApi, GetHistoryApi, CollectionApi, PayApi } = api;
 
 
 export async function queryPoster (payload) {
@@ -41,6 +41,14 @@ export async function queryHistory (payload) {
 export async function queryCollection (payload) {
   return request({
     url: CollectionApi,
+    method: 'get',
+    data: payload,
+  });
+}
+
+export async function queryPayList (payload) {
+  return request({
+    url: PayApi,
     method: 'get',
     data: payload,
   });
