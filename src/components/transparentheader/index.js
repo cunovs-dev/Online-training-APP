@@ -1,3 +1,11 @@
+/*
+ * @Author: your name
+ * @Date: 2021-12-08 10:04:28
+ * @LastEditTime: 2021-12-16 11:04:42
+ * @LastEditors: Please set LastEditors
+ * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ * @FilePath: \ChinaMobile-app\src\components\transparentheader\index.js
+ */
 /* eslint-disable no-undef */
 /**
  * @author Lowkey
@@ -7,9 +15,9 @@
 import React from 'react';
 import { Icon } from 'components/index';
 import PropTypes from 'prop-types';
-import styles from './index.less';
 import { getLocalIcon } from 'utils';
 import { routerRedux } from 'dva/router';
+import styles from './index.less';
 
 const PrefixCls = 'transparentheader';
 
@@ -23,28 +31,27 @@ class TransparentHeader extends React.Component {
     isScroll: false,
   };
 
-  componentWillMount () {
-    console.log(this._isMounted)
-    this._isMounted = true;
-    if (this._isMounted) {
-      document.body.onscroll = () => {
-        let sTop = document.documentElement.scrollTop || document.body.scrollTop;
-        if (sTop > this.props.offset - 45) {
-          this.setState({
-            isScroll: true,
-          });
-        } else {
-          this.setState({
-            isScroll: false,
-          });
-        }
-      };
-    }
-  }
+  // componentWillMount () {
+  //   this._isMounted = true;
+  //   if (this._isMounted) {
+  //     document.body.onscroll = () => {
+  //       let sTop = document.documentElement.scrollTop || document.body.scrollTop;
+  //       if (sTop > this.props.offset - 45) {
+  //         this.setState({
+  //           isScroll: true,
+  //         });
+  //       } else {
+  //         this.setState({
+  //           isScroll: false,
+  //         });
+  //       }
+  //     };
+  //   }
+  // }
 
-  componentWillUnmount () {
-    this._isMounted = false;
-  }
+  // componentWillUnmount () {
+  //   this._isMounted = false;
+  // }
 
   render () {
     const hanleBackClick = () => {
@@ -57,26 +64,27 @@ class TransparentHeader extends React.Component {
           this.state.isScroll
             ?
             <div className={styles[`${PrefixCls}-outer`]}>
-              <div className={styles[`${PrefixCls}-outer-backBtn`]}>
-                <span onClick={hanleBackClick}><Icon style={{ verticalAlign: 'middle' }} type='left'
-                                                     color='#000' /></span>
+                <div className={styles[`${PrefixCls}-outer-backBtn`]}>
+                <span onClick={hanleBackClick}><Icon style={{ verticalAlign: 'middle' }}
+                    type="left"
+                    color="#000"
+                  /></span>
                 <span className={styles[`${PrefixCls}-outer-backBtn-title`]}>
-                {this.props.name}
-              </span>
+                    {this.props.name}
+                  </span>
               </div>
-              <div className={styles[`${PrefixCls}-outer-rightBtn`]}>
-
+                <div className={styles[`${PrefixCls}-outer-rightBtn`]} />
               </div>
-            </div>
             :
-            <div className={styles[`${PrefixCls}-transparentouter`]}
-                 style={{ background: `transparent` }}>
+              <div className={styles[`${PrefixCls}-transparentouter`]}
+              style={{ background: 'transparent', position: 'fixed' }}
+            >
               <div className={styles[`${PrefixCls}-transparentouter-backBtn`]} onClick={hanleBackClick}>
-                <Icon style={{ verticalAlign: 'middle' }} type='left' color='#fff' />
-              </div>
+                  <Icon style={{ verticalAlign: 'middle' }} type="left" color="#fff" />
+                </div>
               <div className={styles[`${PrefixCls}-transparentouter-rightBtn`]}>
-                {this.props.children}
-              </div>
+                  {this.props.children}
+                </div>
             </div>
         }
       </div>

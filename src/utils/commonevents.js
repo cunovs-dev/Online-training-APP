@@ -1,3 +1,11 @@
+/*
+ * @Author: your name
+ * @Date: 2021-12-08 10:04:29
+ * @LastEditTime: 2021-12-24 11:18:38
+ * @LastEditors: Please set LastEditors
+ * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ * @FilePath: \ChinaMobile-app\src\utils\commonevents.js
+ */
 /**
  * @author Lowkey
  * @date 2021/04/25 10:52:15
@@ -12,7 +20,7 @@ import { routerRedux } from 'dva/router';
  * @param payload 参数
  * @param dispatch
  */
-const handleGoto = (dispatch, path = '', payload) => {
+const handleGoto = (dispatch, path = '', payload = {}) => {
   dispatch(routerRedux.push({
     pathname: `/${path}`,
     query: payload,
@@ -27,12 +35,13 @@ const handleGridClick = ({ path = '', text = '', id, fetchType }, dispatch) => {
         pathname: `/${path}`,
         query: {
           name: `${text}`,
+          fetchType
         },
       }));
     }
   } else if (fetchType === 'cj') {
     dispatch(routerRedux.push({
-      pathname: `/videoList`,
+      pathname: '/videoList',
       query: {
         name: `${text}`,
         id,
@@ -58,7 +67,7 @@ const handlerCommonClick = (text = '', dispatch) => {
    *
    */
   dispatch(routerRedux.push({
-    pathname: `/commonlist`,
+    pathname: '/commonlist',
     query: {
       name: `${text}`,
     },

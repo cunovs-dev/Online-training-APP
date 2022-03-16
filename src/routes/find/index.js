@@ -1,3 +1,11 @@
+/*
+ * @Author: your name
+ * @Date: 2021-12-08 10:04:29
+ * @LastEditTime: 2021-12-16 16:59:13
+ * @LastEditors: Please set LastEditors
+ * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ * @FilePath: \ChinaMobile-app\src\routes\find\index.js
+ */
 import React from 'react';
 import { connect } from 'dva';
 import { defaultBusiness } from 'utils/defaults';
@@ -8,14 +16,24 @@ import { List, SearchBar } from 'components';
 
 let child,
   PrefixCls = 'find';
-const Comp = ({ location, dispatch, find, loadingList, app }) => {
+const Comp = ({ dispatch, find, loadingList, app }) => {
   const { vocationalList, sceneList, weaknessList } = app,
-    { listData, hasMore, scrollerTop } = find;
+    { listData, hasMore, scrollerTop, searchObj, searchTxt } = find;
   const submit = (data) => {
     dispatch({
       type: 'find/search',
-      payload: data,
+      payload: {
+        isRefresh: true,
+        ...data
+      },
       callback: child.handlerCancelClick,
+    });
+    dispatch({
+      type: 'find/updateState',
+      payload: {
+        searchObj: data,
+        searchTxt
+      },
     });
   };
   const search = (txt) => {
@@ -26,6 +44,24 @@ const Comp = ({ location, dispatch, find, loadingList, app }) => {
         isRefresh: true,
       },
     });
+    dispatch({
+      type: 'find/updateState',
+      payload: {
+        searchTxt: txt,
+        searchObj
+      },
+    });
+  };
+
+  const cancel = () => {
+    dispatch({
+      type: 'find/updateState',
+      payload: {
+        listData: [],
+        searchTxt: undefined,
+        searchObj: {}
+      },
+    });
   };
   const props = {
     vocationalList,
@@ -33,6 +69,7 @@ const Comp = ({ location, dispatch, find, loadingList, app }) => {
     weaknessList,
     onOk: submit,
     onCancel: () => child.handlerCancelClick(),
+    selfChoice: searchObj
   };
 
   const onRef = (ref) => {
@@ -43,17 +80,21 @@ const Comp = ({ location, dispatch, find, loadingList, app }) => {
       dispatch({
         type: `${PrefixCls}/search`,
         payload: {
-          callback,
           isRefresh: true,
+          txt: searchTxt,
+          ...searchObj
         },
+        callback,
       });
     },
     onEndReached = (callback) => {
       dispatch({
         type: `${PrefixCls}/search`,
         payload: {
-          callback,
+          txt: searchTxt,
+          ...searchObj
         },
+        callback,
       });
     },
     onScrollerTop = (top) => {
@@ -74,16 +115,16 @@ const Comp = ({ location, dispatch, find, loadingList, app }) => {
     listData,
     hasMore,
     scrollerTop,
-    loadingList,
+    loading: loadingList,
     dispatch,
     selectable: false,
   };
 
   return (
     <div>
-      <SearchBar style={{ backgroundColor: '#02b7ee' }} onSubmit={search} placeholder="搜索" maxLength={8} />
-      <FilterModal onRef={onRef} form={<FilterForm  {...props} hasFooter />} hasFooter={false} />
-      <VideoListView  {...listProps} />
+      <SearchBar style={{ backgroundColor: '#02b7ee' }} onSubmit={search} placeholder="搜索" maxLength={8} onCancel={cancel} />
+      <FilterModal onRef={onRef} form={<FilterForm {...props} hasFooter />} hasFooter={false} />
+      <VideoListView {...listProps} />
     </div>
   );
 };

@@ -1,0 +1,54 @@
+@import "../../themes/default";
+
+@PrefixCls: hotCourse;
+
+.@{PrefixCls}-outer {
+  padding: 20px;
+  background: #ffffff;
+  position: relative;
+  border-radius: @radius;
+  &-title {
+    font-size: @titleFontSize;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    &-left {
+      display: flex;
+      align-items: center;
+      color: #ee8c0f;
+    }
+    &-right {
+      font-size: @commonFonetSize;
+      color: @infoColor;
+    }
+  }
+}
+
+.@{PrefixCls}-image {
+  position: relative;
+  max-height: 22vh;
+  & img {
+    height: 16vh;
+  }
+}
+
+.tag {
+  position: absolute;
+  top: 0;
+  right: 10px;
+}
+
+.text {
+  font-size: @commonFonetSize;
+  margin-top: 6px;
+  .ellipsisTitle;
+  margin-bottom: 6px;
+}
+
+.question {
+  font-size: @subFontSize;
+  color: @infoColor;
+  margin: 0 0 10px;
+  .ellipsisTitle;
+}

@@ -187,6 +187,42 @@ const Routers = function ({ history, app }) {
           },
         },
         {
+          path: 'reply',
+          getComponent (nextState, cb) {
+            require.ensure([], (require) => {
+              registerModel(app, require('models/reply'));
+              cb(null, require('routes/reply/'));
+            }, 'reply');
+          },
+        },
+        {
+          path: 'rank',
+          getComponent (nextState, cb) {
+            require.ensure([], (require) => {
+              registerModel(app, require('models/rank'));
+              cb(null, require('routes/rank/'));
+            }, 'rank');
+          },
+        },
+        {
+          path: 'history',
+          getComponent (nextState, cb) {
+            require.ensure([], (require) => {
+              registerModel(app, require('models/history'));
+              cb(null, require('routes/history/'));
+            }, 'history');
+          },
+        },
+        {
+          path: 'praise',
+          getComponent (nextState, cb) {
+            require.ensure([], (require) => {
+              registerModel(app, require('models/praise'));
+              cb(null, require('routes/praise/'));
+            }, 'praise');
+          },
+        },
+        {
           path: 'perfectInformation',
           getComponent (nextState, cb) {
             require.ensure([], (require) => {

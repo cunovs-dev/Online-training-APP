@@ -1,0 +1,40 @@
+@import "../../themes/default.less";
+
+@PrefixCls: searchheader;
+.@{PrefixCls}-outer {
+  width: 100%;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  height: 100px;
+  box-sizing: border-box;
+  .logo {
+    height: 60px;
+    margin-right: 40px;
+  }
+  &-text {
+    padding: 10px;
+    border-radius: 50%;
+    text-align: center;
+    vertical-align: middle;
+  }
+  &-search {
+    width: 65%;
+    height: 60px;
+    display: flex;
+    padding-left: 30px;
+    align-items: center;
+    justify-content: flex-start;
+    margin-right: 20px;
+    border-radius: 40px;
+    background-color: #F7F6F4;
+    color:@infoColor;
+    & span {
+      margin-right: 20px;
+      font-size: 30px;
+      letter-spacing: 1em;
+    }
+
+  }
+}

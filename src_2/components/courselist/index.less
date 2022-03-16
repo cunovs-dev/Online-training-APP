@@ -1,0 +1,26 @@
+@import "../../themes/default";
+@PrefixCls: courselist;
+.@{PrefixCls}-outer {
+  & p {
+    margin: 0;
+    font-size:@titleFontSize ;
+    font-weight: bold;
+  }
+  :global{
+    .am-accordion .am-accordion-item .am-accordion-header{
+      border:0 none;
+      padding: 0 40px;
+      background: #ecf2f5;
+    }
+    .am-accordion .am-accordion-item .am-accordion-content .am-accordion-content-box{
+      border-bottom: 0 none;
+      padding:0 60px;
+    }
+  }
+}
+.@{PrefixCls}-part{
+  padding:10px 20px;
+}
+.@{PrefixCls}-accordion{
+  border: 0 none;
+}

@@ -1,0 +1,42 @@
+@import "../../themes/default";
+
+@PrefixCls: infobox;
+.@{PrefixCls}-outer {
+  position: relative;
+  width: 48%;
+  border-radius: 20px;
+  margin-bottom: 20px;
+
+  &-image {
+    width: 100%;
+    height: 200px;
+    background-size: cover;
+    border-radius: 20px;
+  }
+  & h3 {
+    font-size: @commonFonetSize;
+    margin: 10px 0;
+    .ellipsisTitle;
+  }
+  &-question {
+    font-size: @subFontSize;
+    color: @infoColor;
+    margin: 0 0 10px;
+    .ellipsisTitle;
+  }
+  &-info {
+    font-size: @subFontSize;
+    display: flex;
+    justify-content: space-between;
+    &-box {
+      display: flex;
+      align-items: center;
+      margin-right: 40px;
+    }
+  }
+}
+.tag {
+  position: absolute;
+  top:0;
+  right: 10px;
+}

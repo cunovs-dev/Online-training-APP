@@ -1,0 +1,23 @@
+@import "../../themes/default.less";
+@PrefixCls :userinfo;
+
+.@{PrefixCls}-outer{
+  background: #fff;
+  &-imgbox{
+    display: flex;
+    img{
+      width: 150px;
+      height: 150px;
+      margin-top: 30px;
+      border-radius: 50%;
+    }
+    & div{
+      font-size: 30px;
+      margin-top: 30px;
+      margin-left: 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+    }
+  }
+}

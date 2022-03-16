@@ -97,7 +97,7 @@ const pattern = (type) => {
   obj.svg = /mymobile/ig;
   obj.phone = /^1\d{10}$/;
   obj.email = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
-  obj.password = /^(?=.*\d)(?=.*[a-zA-Z])(?=.*[~!@#$%^&*])[\da-zA-Z~!@#$%^&*]{6,12}$/; //6-12 数字、字母、特殊字符
+  obj.password = /^(?=.*\d)(?=.*[a-zA-Z])(?=.*[~!@#$%^&*])[\da-zA-Z~!@#$%^&*]{6,12}$/; // 6-12 数字、字母、特殊字符
   return obj[type];
 };
 
@@ -164,11 +164,12 @@ const getVideoTips = (id, priority = 'yw') => {
   if (Array.isArray(sceneList) && sceneList.find(item => item.id === id)) {
     cjRes = sceneList.find(item => item.id === id).title || '';
   }
+
   if (priority === 'yw') {
     return ywRes !== '' ? ywRes : cjRes;
-  } else {
-    return cjRes !== '' ? cjRes : ywRes;
-  }
+  } 
+
+  return cjRes !== '' ? cjRes : ywRes;
 };
 
 const filterArr = (arr1 = [], arr2 = []) => {
@@ -183,6 +184,30 @@ const filterArr = (arr1 = [], arr2 = []) => {
   }
   return [];
 };
+
+const formatDuring = (value) => {
+  let secondTime = parseInt(value); // 秒
+  let minuteTime = 0; // 分
+  let hourTime = 0; // 小时
+  if (secondTime >= 60) {
+    minuteTime = parseInt(secondTime / 60);
+    secondTime = parseInt(secondTime % 60);
+    if (minuteTime >= 60) {
+      hourTime = parseInt(minuteTime / 60);
+      minuteTime = parseInt(minuteTime % 60);
+    }
+  }
+  let result = `${parseInt(secondTime) < 10 ? `0${parseInt(secondTime)}` : parseInt(secondTime)}`;
+
+  // if (minuteTime > 0) {
+  result = `${parseInt(minuteTime) < 10 ? `0${parseInt(minuteTime)}` : parseInt(minuteTime)}分`;
+  // }
+  // if (hourTime > 0) {
+  result = `${parseInt(hourTime) < 10 ? `0${parseInt(hourTime)}` : parseInt(hourTime)}小时${result}`;
+  // }
+  return result;
+};
+
 
 module.exports = {
   config,
@@ -200,4 +225,5 @@ module.exports = {
   renderSize,
   getCommonDate,
   setSession,
+  formatDuring
 };

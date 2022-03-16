@@ -6,8 +6,8 @@
 import { config } from 'utils';
 import { _cg } from './cookie';
 
-const { questionnaireURL,userTag: { userToken} } = config;
-const questionnairePath = `${questionnaireURL}?token=${_cg(userToken)}`;
+const { questionnaireURL, userTag: { userToken } } = config;
+const questionnairePath = `${_cg('voteUri') ? _cg('voteUri') : questionnaireURL}?token=${_cg(userToken)}`;
 
 const defaultTabBars = [{
   title: '首页',
@@ -21,27 +21,21 @@ const defaultTabBars = [{
   icon: require('themes/images/ntabr/utils.png'),
   selectedIcon: require('themes/images/ntabr/utils-o.png'),
   route: '/documents',
-}, {
-  title: '联盟单位',
-  key: 2,
-  icon: require('themes/images/ntabr/out.png'),
-  selectedIcon: require('themes/images/ntabr/out-o.png'),
-  route: '/out',
 },
-  {
-    title: '发现',
-    key: 2,
-    icon: require('themes/images/ntabr/find.png'),
-    selectedIcon: require('themes/images/ntabr/find-o.png'),
-    route: '/find',
-  }
-  , {
-    title: '会员中心',
-    key: 5,
-    icon: require('themes/images/ntabr/mine.png'),
-    selectedIcon: require('themes/images/ntabr/mine-o.png'),
-    route: '/mine',
-  },
+{
+  title: '发现',
+  key: 2,
+  icon: require('themes/images/ntabr/find.png'),
+  selectedIcon: require('themes/images/ntabr/find-o.png'),
+  route: '/find',
+},
+{
+  title: '会员中心',
+  key: 5,
+  icon: require('themes/images/ntabr/mine.png'),
+  selectedIcon: require('themes/images/ntabr/mine-o.png'),
+  route: '/mine',
+},
 ];
 
 const defaultBusiness = [
@@ -84,6 +78,9 @@ const defaultSceneIcon = {
   1: require('../themes/images/grid/07.png'),
   4: require('../themes/images/grid/08.png'),
   3: require('../themes/images/grid/09.png'),
+  6: require('../themes/images/grid/11.png'),
+  5: require('../themes/images/grid/10.png'),
+  12: require('../themes/images/grid/12.png'),
 };
 
 
@@ -111,8 +108,8 @@ const mineGrid = [
     path: questionnairePath,
   }, {
     icon: require('../themes/images/others/credit.png'),
-    text: '消费记录',
-    path: 'consumption',
+    text: '已赞课程',
+    path: 'praise',
   },
 ];
 

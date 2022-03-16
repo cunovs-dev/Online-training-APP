@@ -1,0 +1,22 @@
+@PrefixCls: titlebox;
+.outer {
+  :global {
+    .am-list-body {
+      border: 0;
+    }
+    .am-list-item {
+      overflow: initial;
+    }
+    .am-list-item .am-list-line .am-list-content {
+      font-size: @titleFontSize;
+    }
+    .am-list-item .am-list-line .am-list-extra{
+      overflow: initial;
+    }
+  }
+}
+
+.@{PrefixCls}-title {
+  border-right: 8px solid @primary-color;
+  margin-right: 10px;
+}

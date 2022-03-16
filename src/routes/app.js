@@ -4,6 +4,7 @@ import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import { classnames, config, getLocalIcon } from 'utils';
 import { Loader, TabBar, Icon, Modal } from 'components';
+import '../../node_modules/video-react/dist/video-react.css';
 import './app.less';
 
 let isFirst = true;
@@ -72,11 +73,11 @@ const App = ({ children, dispatch, app, loading, location }) => {
             onPress: () => {
               const { appends = {}, route } = _;
               dispatch(routerRedux.push({
-                  pathname: route,
-                  query: {
-                    ...appends,
-                  },
+                pathname: route,
+                query: {
+                  ...appends,
                 },
+              },
               ));
             },
           }, _);

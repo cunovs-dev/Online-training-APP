@@ -1,0 +1,72 @@
+@import "../../themes/default";
+
+@PrefixCls: row;
+@ColorCard: white;
+@ColorInfo: white;
+@FontSizeLg: 30px;
+@FontSizeNm: 30px;
+@FontSizeSm: 25px;
+.imgs {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin: 10px 15px 0 15px;
+}
+
+.outerflex {
+  padding: 20px 20px;
+  background: #fff;
+  display: flex;
+  justify-content: start;
+}
+
+.flex {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.@{PrefixCls}-common {
+  :global {
+    .am-list-item.am-list-item-middle .am-list-line {
+      align-items: normal;
+    }
+    .am-list-item .am-list-line-wrap .am-list-content {
+      display: flex;
+      justify-content: space-between;
+      flex-direction: column;
+    }
+  }
+  &-title {
+    font-size: @commonFonetSize;
+    font-weight: bold;
+    .ellipsisTitle;
+  }
+  & img {
+    width: 220px;
+    height: 160px;
+    border-radius: 10px;
+  }
+  &-info {
+    display: flex;
+    font-size: 26px;
+    color: @infoColor;
+    margin-top: 20px;
+    &-box {
+      display: flex;
+      align-items: center;
+      margin-right: 40px;
+      & span {
+        margin-right: 10px;
+      }
+    }
+  }
+}
+
+.consumption{
+  .num{
+    font-size: 40px;
+    font-weight: bold;
+    color: orange;
+  }
+}

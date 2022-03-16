@@ -11,13 +11,13 @@ import styles from './index.less';
 class FilterForm extends React.Component {
   constructor (props) {
     super(props);
-    const { selfChoice = {} } = props;
-    console.log(selfChoice)
-    const { yw = [], cj = [] } = selfChoice;
+    const { selfChoice = {}, } = props;
+  
+    const { yw = '', cj = '' } = selfChoice;
     this.state = {
       height: document.documentElement.clientHeight - 45,
-      yw,
-      cj,
+      yw: typeof (yw) === 'string' ? yw.split(',') : yw,
+      cj: typeof (cj) === 'string' ? cj.split(',') : cj,
       fl: [],
     };
   }
@@ -75,9 +75,16 @@ class FilterForm extends React.Component {
       const sort = weaknessList.find(item => item.id === weakness);
       return (
         <div>
-          <div className={styles.title}>短板</div>
-          {sort ? <Tag className={styles.tag} disabled>{sort.title}</Tag> : null}
-          <Button type="primary" onClick={() => this.onSubmit('edit')}>提交</Button>
+          {
+            sort ?
+              <div>
+                <div className={styles.title}>短板</div>
+                <Tag className={styles.tag} disabled>{sort.title}</Tag>
+              </div>
+              :
+              null
+          }
+          <Button type="primary" onClick={() => this.onSubmit(sort ? 'edit' : '')}>提交</Button>
         </div>
       );
     }
@@ -90,20 +97,27 @@ class FilterForm extends React.Component {
   };
 
   render () {
-    const { perfect = false, sceneList, vocationalList, weaknessList, selfChoice={} } = this.props;
+    const { perfect = false, sceneList, vocationalList, weaknessList, selfChoice = {} } = this.props;
     const { fl: weakness = {} } = selfChoice;
+  
     const { yw, cj } = this.state;
     return (
       <div className={styles.outer}>
         <div>
           <div className={styles.title}>业务</div>
-          {vocationalList.map(item => <Tag key={item.id} selected={yw.includes(item.id)} className={styles.tag}
-                                           onChange={(select) => this.onVocationalChange(select, item, 'yw')}>{item.title}</Tag>)}
+          {vocationalList.map(item => (<Tag key={item.id}
+            selected={yw.includes(item.id)}
+            className={styles.tag}
+            onChange={(select) => this.onVocationalChange(select, item, 'yw')}
+          >{item.title}</Tag>))}
         </div>
         <div>
           <div className={styles.title}>场景</div>
-          {sceneList.map(item => <Tag key={item.id} selected={cj.includes(item.id)} className={styles.tag}
-                                      onChange={(select) => this.onVocationalChange(select, item, 'cj')}>{item.title}</Tag>)}
+          {sceneList.map(item => (<Tag key={item.id}
+            selected={cj.includes(item.id)}
+            className={styles.tag}
+            onChange={(select) => this.onVocationalChange(select, item, 'cj')}
+          >{item.title}</Tag>))}
         </div>
         {
           perfect ?
@@ -111,15 +125,20 @@ class FilterForm extends React.Component {
             :
             <div>
               <div className={styles.title}>短板</div>
-              {weaknessList.map(item => <Tag key={item.id} className={styles.tag}
-                                             onChange={(select) => this.onVocationalChange(select, item, 'fl')}>{item.title}</Tag>)}
+              {weaknessList.map(item => (<Tag key={item.id}
+                className={styles.tag}
+                onChange={(select) => this.onVocationalChange(select, item, 'fl')}
+              >{item.title}</Tag>))}
             </div>
         }
         {
           this.props.hasFooter ?
             <div className={styles.foot}>
-              <Button inline size="small" style={{ marginRight: '20px' }}
-                      onClick={this.props.onCancel}>取消</Button>
+              <Button inline
+                size="small"
+                style={{ marginRight: '20px' }}
+                onClick={this.props.onCancel}
+              >取消</Button>
               <Button type="primary" inline size="small" onClick={this.onSearch}>确定</Button>
             </div>
             :
